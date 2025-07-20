@@ -1,0 +1,212 @@
+[
+  {
+    "path": "/SDH: DF/Frontend/Libraries/SignalR",
+    "chunkIndex": 0,
+    "chunk": "[[_TOC_]]\n## Що таке SignalR?\nSignalR — це бібліотека, яка спрощує процес передачі функціональних можливостей у режимі реального часу до веб додатків. Веб-функціональність у режимі реального часу — це можливість серверного коду миттєво надсилати зміст підключеним клієнтам, коли він стає доступним, замість того, щоб сервер чекав, поки клієнт відправить запит на нові дані."
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/SignalR",
+    "chunkIndex": 1,
+    "chunk": "<IMG  src=\"https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/introduction-to-signalr/_static/image1.png\"/>\nSignalR надає простий API для створення віддалених викликів процедур (RPC) між сервером і клієнтом, які викликають функції JavaScript у клієнтських браузерах (та інших клієнтських платформах) із .NET коду.\n- Introduction to SignalR\n[https://docs.microsoft.com/en-us/aspnet/signalr/overview/getting-started/introduction-to-signalr]()\n- SignalR JavaScript client"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/SignalR",
+    "chunkIndex": 2,
+    "chunk": "[https://docs.microsoft.com/en-us/aspnet/core/signalr/javascript-client?view=aspnetcore-6.0&tabs=visual-studio]()\n## Опис реалізації\nПідключення до концентратору знаходиться у хуці _useSetup_ в директорії _hooks_:\n![image.png](/.attachments/image-a579e30d-8921-4629-a246-cf350b1605c8.png)\nПідключення логування:\n![image.png](/.attachments/image-623b9642-6714-46a5-a03a-7748f502b3f9.png)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/SignalR",
+    "chunkIndex": 3,
+    "chunk": "Запускає з'єднання функція _establishConnection_ викликом метода _start_, що знаходиться у файлі thunks.ts в директорії signalR у Редакс сторі:\n![image.png](/.attachments/image-0f173c23-39e3-4371-9e93-48570506f895.png)\nЩоб отримати повідомлення від концентратора, використовуємо метод _on_, виклик метода знаходиться у функції _handleIndicateHubMethods_  у хуці _useSetup_:\n![image.png](/.attachments/image-e815e39d-ccc2-41f3-a785-6d05d7cb6db3.png)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/SignalR",
+    "chunkIndex": 4,
+    "chunk": "На данний момент SignalR на порталі використовується при:\n- відображенні сторінки PBI звітів\n- відображенні степ бару\nЩоб викликати методи концентратора з клієнта, використовуємо метод _ivoke_, виклик метода можна знайти у файлі PowerBI.tsx у спільній директорії сторінок порталу - pages:\n![image.png](/.attachments/image-1b28d222-bd94-43a2-a547-d3f7873bb0dd.png)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/SignalR",
+    "chunkIndex": 5,
+    "chunk": "Цей функціонал дозволяє сповістити про відкриття/закриття сторінки зі звітами для подальшого запуску/зупинки необхідних для роботи сторінки ресурсів.\nЩоб розірвати з'єднання, використовуємо метод _stop_, виклик метода можна знайти у функції _handleLogout_ у файлі App.tsx:\n![image.png](/.attachments/image-9405a4d7-b855-4539-af1e-334ca0e1328b.png)\nБуло почато роботи по аналізу: #8195\n## Reconnect policy scheme\n![image.png](/.attachments/image-36a4cb89-501e-4a12-b7c5-3a625bcde90a.png)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/SignalR",
+    "chunkIndex": 6,
+    "chunk": "На схемі зазначено перелік запитів для отримання поточних статусів після події **\"OnReconnected\"**, в залежності від того на якій сторінці знаходиться користувач.\n[Understanding and Handling Connection Lifetime Events in SignalR](https://learn.microsoft.com/en-us/aspnet/signalr/overview/guide-to-the-api/handling-connection-lifetime-events)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/SignalR",
+    "chunkIndex": 7,
+    "chunk": "Відправка запитів для примусового отримання поточних статусів бізнес процесів, з якими користувач взаємодіє у реальному часі з інтерфейсу, відбувається після події **\"OnReconnected\"**.   \nПодія **\"OnReconnected\"** буде викликана кожного разу, коли клієнт SignalR автоматично відновлює з'єднання з сервером SignalR після втрати з'єднання."
+  },
+  {
+    "path": "/SDH: DF/Frontend/Refresh token flow from the UI side",
+    "chunkIndex": 0,
+    "chunk": "[[_TOC_]]\n## Що таке Refresh та Access Token?\n![BPJjA.png](/.attachments/BPJjA-c2d34643-fb88-4e6c-aaac-a8e2c9fa8ea1.png)\n- _Access token_ використовується при запитах до серверу і генерується після вдалої авторизації. Він має дві властивості: він багаторазовий і короткоживучий."
+  },
+  {
+    "path": "/SDH: DF/Frontend/Refresh token flow from the UI side",
+    "chunkIndex": 1,
+    "chunk": "Refresh token використовується для оновлення пари access та refresh токенів. У нього теж є дві властивості, він одноразовий і довгоживучий. Коли час життя access token добігає кінця, веб додаток при спробі наступного запиту використовує refresh token, щоб оновити обидва токена і продовжити використовувати новий access token.\n## Що таке Axios interceptors?\n⠀\n<IMG  src=\"https://miro.medium.com/max/1400/1*GHVbXpS_PfpTzyjb6J3QUg.png\"/>"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Refresh token flow from the UI side",
+    "chunkIndex": 2,
+    "chunk": "_Axios interceptors_ — це функції, які бібліотека Axios викликає для кожного запиту. Ви можете використовувати ці \"перехоплювачі\", щоб перетворити запит до того, як Axios його надішле, або перетворити відповідь до того, як Axios поверне відповідь до коду який її оброблює.\n[https://axios-http.com/docs/interceptors](https://axios-http.com/docs/interceptors)\n## Опис реалізації\nНалаштування конфігурацій для запитів знаходиться у файлі _apiConfig.ts_ у директорії _constants_:"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Refresh token flow from the UI side",
+    "chunkIndex": 3,
+    "chunk": "![image.png](/.attachments/image-849472b1-1c4a-4d42-a921-944a9c9daa38.png)\n- Змінна булевого типу для ознаки оновлення.\n- Массив, элементами якого є запит або запити з помилкою з ознакою закінчення життя access token.\nФукція, що відміняє всі активні запити, при першій відповіді на запит з ознакою закінчення життя access token:\n![image.png](/.attachments/image-c1f937a6-8dfe-4aaa-bb86-3ab4a8364e78.png)\nГоловна функція axios response interceptors:"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Refresh token flow from the UI side",
+    "chunkIndex": 4,
+    "chunk": "![image.png](/.attachments/image-fadb2f04-c7b4-403b-a7fc-0819314c470c.png)\nЯкщо до функції перехоплювача потрапить запит з помилкою, статус якої рівний 401, з хедером 'token-expired' і це не повторний запит з ознакою рефреша, тоді відбувається наступне:"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Refresh token flow from the UI side",
+    "chunkIndex": 5,
+    "chunk": "- Запит на оновлення AAD токену, через метод <a href=\"https://ds-vsts.visualstudio.com/SmartDecisionHub/_wiki/wikis/SmartDecisionHub.wiki/334/Azure-Active-Directory-from-the-UI-side?anchor=single-page-application%3A-acquire-a-token-to-call-an-api\">acquireTokenSilent</a>\n- Запит на оновлення /api/authentication/refresh\n- Запит для верификації токена /api/antiforgery\n- Повторний запит або запити, які до цього приходили з помилкою з ознакою закінчення життя access token"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 0,
+    "chunk": "[[_TOC_]]\n# Filtering module architecture\n![image.png](/.attachments/image-223f016e-34ef-4faa-a134-d165a0ffe9f6.png)\n# Description of the “My Filters” tab functionality\nEach user has the ability to create and save their own personalized set of filters for future use on the portal.\nThis can be done by navigating to the _“My Filters”_ tab in the settings section:\n![image.png](/.attachments/image-a2b6302e-41f2-476d-9932-7479961110cf.png)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 1,
+    "chunk": "Here, you can create your first filter group by clicking the _“Add Filter”_ button:\n![image.png](/.attachments/image-365e44ce-f387-4393-b13a-119996607f37.png)\nEach filter block includes three subgroups:\n- Product filter\n- Store filter\n- Sales type filter\n![image.png](/.attachments/image-9d8e0060-2977-4a52-8a6b-2e1af4ff5643.png)\nTo enable the save changes button, you need to fill in at least one level in any of the subgroups. This action will also activate the button for adding a new filter block:"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 2,
+    "chunk": "![image.png](/.attachments/image-c1b9cb73-3683-498d-a114-252592ddfc43.png)\n![image.png](/.attachments/image-304dcefd-90a7-48a3-9615-16479ca17192.png)\n![image.png](/.attachments/image-4e82d377-2714-4ae2-bc6f-ad3ac6ae1bbf.png)\nEach filter block has its own control panel:\n![image.png](/.attachments/image-488bbf4a-f829-4bd2-97fa-f6d31e201989.png)\nIt includes functionality for:\n- Renaming the filter block\n- Setting it as the default filter (only one filter block can be set as default)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 3,
+    "chunk": "- Deleting the entire block\n# Description of the filtering functionality on the “Modeling” page\nThere are two scenarios that occur when a user opens the page:\n- The user had a default filter set:\n⠀![image.png](/.attachments/image-2309a724-2ac7-46ab-818c-973629f407c7.png)\n![image.png](/.attachments/image-b2f4ea75-b6e0-4ec1-86ac-8ebe6aa4a976.png)\nThis filter block is automatically applied to the Modeling page.\n- The user does not have a default filter set:\n⠀"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 4,
+    "chunk": "![image.png](/.attachments/image-2e807588-6f30-499b-939b-6c531d8519ea.png)\nThe filter block is empty.\nThe filter block on the Modeling page has its own control panel:\n![image.png](/.attachments/image-1a930b9a-5e20-416d-a5c8-d4ad97a10cc5.png)\nIt includes functionality for:\n- Selecting a filter block from the list of those created by the user in the settings\n- Applying the default filter (the button is active if a default filter block exists)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 5,
+    "chunk": "- Clearing the entire filter block and resetting the selected filter in the dropdown list\nFilling in the filter block or changing the selection in any of the subgroups triggers a request to retrieve an new data for complex scenarios.\n![image.png](/.attachments/image-ec3f94b7-979c-4eea-800d-dde761b028da.png)\n![image.png](/.attachments/image-2c6a4764-cf89-4afb-a6ac-1f15c6b668a4.png)\n![image.png](/.attachments/image-de18c820-fe0f-4c71-9aa7-ea88743dbd38.png)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 6,
+    "chunk": "![image.png](/.attachments/image-977b858d-036e-48d9-88e5-61f6f9a04702.png)\n# Implementation details\nTo retrieve the number of levels in each subgroup of the filter block, the following endpoint is used:\n_/api/filtergroup/filtersizes_\nThe implementation of the “My Filters” settings tab functionality is located here:\n![image.png](/.attachments/image-ff857edc-f666-4f01-a862-f947ff4601db.png)\nThe reusable filter block component is located here:"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 7,
+    "chunk": "![image.png](/.attachments/image-7de0b43b-7382-47d4-96e1-d70da032fead.png)\nDescription of the functions using the store filter as an example (similar functions are implemented for the product/sales type  filter as well):\n![image.png](/.attachments/image-a9171f1b-6385-4df7-a7ca-ccdaaf30a29e.png)\n- useAsyncLoading – a custom hook used for implementing lazy loading within filter levels\n- _useAsyncSearch_ - a custom hook used for fast searching within filter levels"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 8,
+    "chunk": "useFetchLevelFilters - a custom hook used to fetch filter level data from the server\n- _useFieldsReset_ - a custom hook used to reset filter levels\n- _useSetLevelFilters_ - a custom hook used to apply a saved filter level configuration\nThe endpoint for requesting filter level data, /api/customerlevelsfilter/filter, can accept the following parameters:"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 9,
+    "chunk": "- _currentLevelIds_ - an array of IDs from the last completed level before the desired one (levels where all items are selected are not included)\n- _currentLevelNumber_ - the number of the last completed level before the desired one (excluding levels with all items selected)\n- _searchWord_ - a string-type search query\n- _neededLevelNumber_ - the number of the filter level you want to retrieve"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Web application/Filtering functionality",
+    "chunkIndex": 10,
+    "chunk": "To retrieve filtering results for the Modeling page (i.e., obtaining the last completed level and its values), we use the functions located here:\n![image.png](/.attachments/image-0f94adb6-0cb0-4421-be2d-11ee5ac312af.png)\n- _useProcessFiltering_ - hook contains logic that aggregates filtering parameters for further use — for example, to be passed in a request to the server."
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Plotly.js",
+    "chunkIndex": 0,
+    "chunk": "[[_TOC_]]\n## Що таке Plotly.js?\nPlotly.js - це високорівнева декларативна бібліотека, побудована поверх d3.js та stack.gl. Ось список функцій, які роблять Plotly однією з найкращих бібліотек для побудови графіків:"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Plotly.js",
+    "chunkIndex": 1,
+    "chunk": "- За допомогою Plotly.js можна легко створювати інтерактивні діаграми. Будь-яка діаграма, яку Ви створюєте у бібліотеці, оснащена такими функціями, як масштабування, панорамування, автомасштабування тощо. Ці функції дуже корисні, коли Ви хочете візуалізувати діаграми з великою кількістю побудованих точок. Всі ці події відображаються в API, тому ви можете написати власний код для виконання власних дій при спрацюванні будь-якої з цих подій."
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Plotly.js",
+    "chunkIndex": 2,
+    "chunk": "- Висока продуктивність при побудові великої кількості точок робить Plotly.js чудовим вибором, коли Вам потрібно відобразити великий обсяг даних. Оскільки більшість діаграм створюються за допомогою SVG, ви отримуєте сумісність між браузерами та можливість експортувати високоякісні зображення будь-якого графіка. Однак залучення великої кількості елементів SVG у DOM може негативно позначитися на продуктивності. Бібліотека використовує stack.gl для створення високопродуктивних 2D та 3D-діаграм."
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Plotly.js",
+    "chunkIndex": 3,
+    "chunk": "- Всі створені 3D-діаграми за допомогою WebGL повною мірою використовуватимуть усі можливості, пропоновані графічним процесором.\n- Всі графіки Plotly.js повністю налаштовуються. Все, від кольорів та міток до ліній сітки та легенд, можна налаштувати за допомогою набору атрибутів JSON.\n[https://plotly.com/javascript/]()\n## Опис реалізації\nНа порталі ми використовуємо цей інструмент для побудови графіка на основі комплексних сценаріїв."
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Plotly.js",
+    "chunkIndex": 4,
+    "chunk": "![image.png](/.attachments/image-dbe40fb0-33f3-4482-a3c8-3f95b0e8d140.png)\nРеалізація функціоналу побудови графіка знаходиться тут:\n![image.png](/.attachments/image-9a3c37a2-c749-4e06-b813-cf62c5ef31e0.png)\n### Passive Roll Over Protective Structure (Props):\n![image.png](/.attachments/image-8dfdb224-699a-4ba4-9938-e2e21443667e.png)\n- traceData - масив датасетів (вісь ординат та конфігураційні налаштування)\n⠀\n![image.png](/.attachments/image-be22d94f-46f3-4e9f-9760-0202b165466d.png)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Plotly.js",
+    "chunkIndex": 5,
+    "chunk": "-  _dateRange_ - масив дат (вісь абсцис)\n### Configuration Options\nПовний список налаштувань знаходиться тут:\nhttps://plotly.com/javascript/configuration-options/\n![image.png](/.attachments/image-075245f9-299e-4632-a15d-4ea3bab0ef3c.png)\n- mode - 'lines+markers'\n- type - 'scatter'\n![image.png](/.attachments/image-43399280-c29c-4529-bfa8-b892f82a6709.png)\n- modeBarButtonsToRemove - перелік для видалення функціональних кнопок, які є за замовчуванням, скорочення їх списку до:\n⠀"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Plotly.js",
+    "chunkIndex": 6,
+    "chunk": "![image.png](/.attachments/image-7c75ad8c-74d4-451d-89ba-a0580672f4a9.png)\n- displaylogo - приховати логотип Plotly\n- toImageButtonOptions - передача додаткових параметрів до функціональних кнопок (в данному випадку им'я для файла з експортованим графіком) \n- responsive - адаптивність графіку\n### Layout\nПовний список налаштувань знаходиться тут:\nhttps://plotly.com/javascript/reference/layout/\n### Сustomize download plot options:\nПриклад для кастомізації файлу для завантаження"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Plotly.js",
+    "chunkIndex": 7,
+    "chunk": "https://plotly.com/javascript/configuration-options/#customize-download-plot-options\n### React plotly\nГайд по встановленню та використанні бібліотеки Plotly з Реактом:\nhttps://github.com/plotly/react-plotly.js/"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 0,
+    "chunk": "[[_TOC_]]\n## Що таке Redux-form?\nRedux-form — це чудовий спосіб керування формами, які працюють на основі Redux. Бібліотека надає змогу HTML-формам в React використовувати Redux для збереження всього свого стану.\n<IMG  src=\"https://miro.medium.com/max/1000/1*l5B5ZaINBUz-7qWuYeqQHQ.png\"/>\n[https://redux-form.com/8.3.0/docs/gettingstarted.md/]()\n## Огляд функціоналу\n### Глосарій"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 1,
+    "chunk": "| **Назва**   | **Тип**   | **Призначення**                                                                                                                                            |\n|-------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 2,
+    "chunk": "| formReducer | reducer   | функція, яка оновлює Redux store на основі змін, що надходять від порталу                                                                                    |\n| reduxForm() | HOC       | функція, яка приймає конфігураційний об'єкт і повертає нову функцію, використовується для того, щоб обернути Ваш компонент форми та оновлювати стейт у сторі |"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 3,
+    "chunk": "| <Field/>    | component | компонент, що знаходиться всередині Вашого компонента форми, використовується для підключення елементів HTML форми  до логіки redux-form                     |\n### formReducer\nДля того щоб Ваші форми були доступні у Редакс сторі, потрібно передати одноразово функцію formReducer до combineReducers.\n![image.png](/.attachments/image-4e17c2aa-095a-4e5e-9b6b-6e1c94bc2bc4.png)\n![image.png](/.attachments/image-0ecd446e-1d58-4eed-9733-a49e7b4e42f3.png)\n### reduxForm()"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 4,
+    "chunk": "Створюємо компонент контейнер, де описується вся бізнес логіка, та компонент для відображення форми: \n![image.png](/.attachments/image-70208932-0e33-4c06-b688-cfcf9b7880eb.png)\nКуди передаємо:\n- initialValues - початкові значення полів у формі\n- form - ID форми (має бути унікальним)\n- onSubmit - функція що відповідає за дії після відправки форми на збереження\n- title - назва форми\n- controls - функціональні кнопки на формі (очистити, видалити тощо)\n- translations - правила локалізації"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 5,
+    "chunk": "- roles, companies - опції для випадаючих списків (в разі потреби)\n- validate - правила валідації\nОгортаємо наш презентаційний компонент:\n![image.png](/.attachments/image-778afc73-1351-4337-88db-e49a577f71d0.png)\n### Field\nДля створення на формі інпута, використовуємо компонент Field:\n![image.png](/.attachments/image-422e6ddb-a0d0-4ae8-ac6c-4c159bd4f34d.png)\n![image.png](/.attachments/image-c018bdc2-4998-4c1f-a70f-148c9a3734d8.png)\nКуди передаємо:"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 6,
+    "chunk": "- name - назва поля (яка повинна співпадати з ключами у об'єктах з початковими значеннями та з правилами валідації)\n- component - компонент HTML форми, для кожного компонента створена додаткова обгортка, інпут:\n⠀\n![image.png](/.attachments/image-bfd309bd-c413-4728-84c2-127d2dc7a7bb.png)\n- label, placeholder, styles, icon - пропси, що приймає компонент інпуту\n### Валідація\n![image.png](/.attachments/image-4ca1e7c9-0a31-4633-9596-512fc54b591b.png)"
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 7,
+    "chunk": "Формуємо об'єкт з ключами які відповідають ключам з initialValues і значеннями яких будуть функції для валідації.\n### Селектори\nRedux-form надає набір корисних селекторів Redux, які можна використовувати в будь-якій частині Вашого коду для запиту стану будь-якої з форм.\nhttps://redux-form.com/8.3.0/docs/api/selectors.md/\n### Action Creators\nRedux-form надає всі свої внутрішні Action Creators, дозволяючи відправляти будь-які екшени, які Вам потрібні."
+  },
+  {
+    "path": "/SDH: DF/Frontend/Libraries/Redux Form",
+    "chunkIndex": 8,
+    "chunk": "https://redux-form.com/8.3.0/docs/api/actioncreators.md/"
+  }
+]

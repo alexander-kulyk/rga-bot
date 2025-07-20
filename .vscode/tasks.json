@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Update Wiki Chunks",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "update-wiki"],
+      "group": "build",
+      "isBackground": false,
+      "options": {
+        "cwd": "${workspaceFolder}/Server"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Server",
+      "type": "shell",
+      "command": "npm",
+      "args": ["start"],
+      "group": "build",
+      "isBackground": true,
+      "options": {
+        "cwd": "${workspaceFolder}/Server"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate Refactoring",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "validate"],
+      "group": "test",
+      "isBackground": false,
+      "options": {
+        "cwd": "${workspaceFolder}/Server"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
