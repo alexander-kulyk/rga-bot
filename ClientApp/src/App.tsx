@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+//core
+import { useState } from 'react';
+import axios from 'axios';
+//components
 import {
   CircularProgress,
   Typography,
+  IconButton,
   TextField,
   Paper,
   Alert,
   Box,
-  IconButton,
 } from '@mui/material';
 import Fingerprint from '@mui/icons-material/Fingerprint';
 import styled from 'styled-components';
-import axios from 'axios';
+//other
 import './App.css';
 
-// TypeScript interfaces
 interface ApiResponse {
   answer?: string;
   error?: string;
