@@ -79,7 +79,7 @@ function App() {
     try {
       const payload: Question = { question: question.trim() };
       const result = await axios.post<ApiResponse>(
-        'http://localhost:5002/api/ask',
+        'https://rga-bot-backend.onrender.com/api/ask',
         payload,
         {
           headers: {
