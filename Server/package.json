@@ -31,7 +31,10 @@
     "langchain": "^0.3.30",
     "mammoth": "^1.9.1",
     "mongoose": "^8.16.4",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "@langchain/core": "^0.1.16",
+    "@langchain/openai": "^0.0.15",
+    "@langchain/community": "^0.0.22"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
