@@ -5,7 +5,7 @@ import handleMongooseError from '../helpers/handleMongooseError.js'; // Import t
 
 const { Schema } = mongoose;
 
-const ManualChunkSchema = new Schema(
+const ChunkSchema = new Schema(
   {
     pageContent: {
       type: String,
@@ -26,6 +26,9 @@ const ManualChunkSchema = new Schema(
   }
 );
 
-ManualChunkSchema.post('save', handleMongooseError);
+ChunkSchema.post('save', handleMongooseError);
 
-export default mongoose.model('Chunk', ManualChunkSchema);
+const getChunkModel = (nameCollation) =>
+  mongoose.model('ChunkModel', ChunkSchema, nameCollation);
+
+export default getChunkModel;

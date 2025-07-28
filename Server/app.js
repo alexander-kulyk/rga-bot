@@ -12,6 +12,7 @@ import logger from './middlewares/logger.js';
 // Import routes
 import wikiRoutes from './routes/wiki.js';
 import askRoutes from './routes/ask.js';
+import uploadRoutes from './routes/upload.js';
 
 // Load environment variables
 dotenv.config();
@@ -32,6 +33,7 @@ app.use(rateLimiter); // Rate limiting middleware
 
 app.use('/api/wiki', wikiRoutes);
 app.use('/api/ask', askRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
