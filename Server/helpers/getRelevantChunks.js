@@ -7,7 +7,10 @@ export const getRelevantChunks = async (
   question,
   topK = 10
 ) => {
-  const embeddings = new OpenAIEmbeddings();
+  const embeddings = new OpenAIEmbeddings({
+    modelName: 'text-embedding-ada-002',
+    batchSize: 20,
+  });
 
   const store = await MemoryVectorStore.fromDocuments(
     documentContent,
