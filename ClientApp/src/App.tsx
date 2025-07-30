@@ -14,12 +14,9 @@ import {
 import Fingerprint from '@mui/icons-material/Fingerprint';
 import styled from 'styled-components';
 //other
+import { IAskResponse } from './types';
+import { model } from './api';
 import './App.css';
-
-interface ApiResponse {
-  answer?: string;
-  error?: string;
-}
 
 interface Question {
   question: string;
@@ -80,20 +77,15 @@ function App() {
 
     try {
       const payload: Question = { question: question.trim() };
-      const result = await axios.post<ApiResponse>(
-        'https://rga-bot-backend.onrender.com/api/ask',
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
 
-      if (result.data.answer) {
-        setResponse(result.data.answer);
-      } else if (result.data.error) {
-        setError(result.data.error);
+      const axiosResponse = await model.sendAsk(payload);
+
+      const result: IAskResponse = axiosResponse.data;
+
+      if (result.answer) {
+        setResponse(result.answer);
+      } else if (result.error) {
+        setError(result.error);
       } else {
         setError('No response received');
       }
