@@ -1,6 +1,5 @@
 //core
-import { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 //components
 import {
   CircularProgress,
@@ -13,14 +12,10 @@ import {
 } from '@mui/material';
 import Fingerprint from '@mui/icons-material/Fingerprint';
 import styled from 'styled-components';
+//hooks
+import { useModelAsk } from './hooks';
 //other
-import { IAskResponse } from './types';
-import { model } from './api';
 import './App.css';
-
-interface Question {
-  question: string;
-}
 
 // Styled components
 const StyledContainer = styled.div`
@@ -58,57 +53,15 @@ const ResponseContainer = styled(Box)`
 `;
 
 function App() {
-  const [question, setQuestion] = useState<string>('');
-  const [response, setResponse] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!question.trim()) {
-      setError('Please enter a question');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-    setResponse('');
-
-    try {
-      const payload: Question = { question: question.trim() };
-
-      const axiosResponse = await model.sendAsk(payload);
-
-      const result: IAskResponse = axiosResponse.data;
-
-      if (result.answer) {
-        setResponse(result.answer);
-      } else if (result.error) {
-        setError(result.error);
-      } else {
-        setError('No response received');
-      }
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setError(
-          err.response?.data?.error || err.message || 'Failed to get response'
-        );
-      } else {
-        setError('An unexpected error occurred');
-      }
-      console.error('Error asking question:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
+  const {
+    handleKeyPress,
+    handleSubmit,
+    setQuestion,
+    question,
+    response,
+    loading,
+    error,
+  } = useModelAsk();
 
   return (
     <StyledContainer>
