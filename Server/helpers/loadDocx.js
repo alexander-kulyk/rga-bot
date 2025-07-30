@@ -8,7 +8,6 @@ import mammoth from 'mammoth';
 import getChunkModel from '../models/manualChunkSchema.js';
 
 // Load and extract plain text from the DOCX file
-
 const loadDocx = async (buffer, fileName) => {
   const collName = fileName
     .replace(/\.[^/.]+$/, '')
