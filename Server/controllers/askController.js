@@ -6,7 +6,7 @@ import getChunkModel from '../models/manualChunkSchema.js';
 const askController = async (req, res) => {
   const { question } = req.body;
 
-  const ManualChunk = getChunkModel('Chunks');
+  const ManualChunk = getChunkModel('chunks');
 
   if (!question || !question.trim()) {
     return res.status(400).json({ error: 'Question is required' });

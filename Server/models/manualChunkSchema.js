@@ -29,6 +29,6 @@ const ChunkSchema = new Schema(
 ChunkSchema.post('save', handleMongooseError);
 
 const getChunkModel = (nameCollation) =>
-  mongoose.model('Chunk', ChunkSchema, nameCollation);
+  mongoose.model('Chunks', ChunkSchema, nameCollation);
 
 export default getChunkModel;
