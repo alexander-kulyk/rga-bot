@@ -6,6 +6,7 @@ import {
 import mammoth from 'mammoth';
 //other
 import getChunkModel from '../models/manualChunkSchema.js';
+import createVectors from './createVectors.js';
 
 // Load and extract plain text from the DOCX file
 const loadDocx = async (buffer, fileName) => {
@@ -35,9 +36,12 @@ const loadDocx = async (buffer, fileName) => {
     //const splittedDocument = await splitter.createDocuments([result.value]);
     const splittedDocument = await splitter.createDocuments([result.value]);
 
+    const documentsWithVectors = await createVectors(splittedDocument);
+
     await ChunkModel.insertMany(
-      splittedDocument.map((doc, i) => ({
+      documentsWithVectors.map((doc, i) => ({
         pageContent: doc.pageContent,
+        embedding: doc.embedding,
         metadata: doc.metadata,
       }))
     );

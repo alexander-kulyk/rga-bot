@@ -12,6 +12,7 @@ const ChunkSchema = new Schema(
       required: true,
       trim: true,
     },
+    embedding: [Number],
     metadata: {
       loc: {
         type: [Schema.Types.Mixed],
