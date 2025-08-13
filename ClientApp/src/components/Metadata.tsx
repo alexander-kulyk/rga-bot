@@ -26,6 +26,11 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
     };
   };
 
+  const formatModelName = (modelName: string) => {
+    // Extract just the base model name (e.g., "gpt-4o" from "gpt-4o-2024-08-06")
+    return modelName.split('-').slice(0, 2).join('-');
+  };
+
   if (!metadata) return null;
 
   const { date, time } = formatTimestamp(metadata.created);
@@ -47,7 +52,7 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
           Model:
         </Typography>
         <Typography variant='caption' sx={{ color: 'black' }}>
-          {metadata.model}
+          {formatModelName(metadata.model)}
         </Typography>
       </Box>
 
