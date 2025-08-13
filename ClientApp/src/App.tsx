@@ -1,5 +1,3 @@
-//core
-import React, { useState } from 'react';
 //components
 import {
   CircularProgress,
@@ -9,13 +7,10 @@ import {
   Paper,
   Alert,
   Box,
-  Modal,
-  Chip,
 } from '@mui/material';
 import Fingerprint from '@mui/icons-material/Fingerprint';
-import InfoIcon from '@mui/icons-material/Info';
-import CloseIcon from '@mui/icons-material/Close';
 import styled from 'styled-components';
+import { Metadata } from './components';
 //hooks
 import { useModelAsk } from './hooks';
 //other
@@ -57,25 +52,7 @@ const ResponseContainer = styled(Box)`
   position: relative;
 `;
 
-const ModalContent = styled(Box)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  max-width: 90vw;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  padding: 24px;
-  outline: none;
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-`;
-
 function App() {
-  const [modalOpen, setModalOpen] = useState(false);
-
   const {
     handleKeyPress,
     handleSubmit,
@@ -86,13 +63,6 @@ function App() {
     error,
     answerModelMetadata,
   } = useModelAsk();
-
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
-
-  const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleString();
-  };
 
   return (
     <StyledContainer>
@@ -118,25 +88,7 @@ function App() {
           {/* Response Display Area */}
           {answerText && (
             <ResponseContainer>
-              {answerModelMetadata && (
-                <IconButton
-                  size='small'
-                  onClick={handleModalOpen}
-                  sx={{
-                    position: 'absolute',
-                    top: 8,
-                    right: 8,
-                    color: '#d9e1f1',
-                    padding: '4px',
-                    // '&:hover': {
-                    //   backgroundColor: '#bcc2ce',
-                    //   color: '#666',
-                    // },
-                  }}
-                >
-                  <InfoIcon fontSize='small' />
-                </IconButton>
-              )}
+              <Metadata metadata={answerModelMetadata} />
               <Typography
                 variant='h6'
                 gutterBottom
@@ -270,138 +222,6 @@ function App() {
             Press Enter or click the send button to ask your question
           </Typography>
         </StyledPaper>
-
-        {/* Metadata Modal */}
-        <Modal
-          open={modalOpen}
-          onClose={handleModalClose}
-          aria-labelledby='metadata-modal-title'
-          aria-describedby='metadata-modal-description'
-        >
-          <ModalContent>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                mb: 2,
-              }}
-            >
-              <Typography
-                id='metadata-modal-title'
-                variant='h6'
-                component='h2'
-                sx={{ fontWeight: 'bold', color: '#333' }}
-              >
-                Response Metadata
-              </Typography>
-              <IconButton
-                onClick={handleModalClose}
-                sx={{ color: '#666', padding: '4px' }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Box>
-
-            {answerModelMetadata && (
-              <Box id='metadata-modal-description'>
-                <Box sx={{ mb: 2 }}>
-                  <Typography
-                    variant='subtitle2'
-                    sx={{ fontWeight: 'bold', color: '#555', mb: 0.5 }}
-                  >
-                    Request ID:
-                  </Typography>
-                  <Chip
-                    label={answerModelMetadata.id}
-                    size='small'
-                    sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}
-                  />
-                </Box>
-
-                <Box sx={{ mb: 2 }}>
-                  <Typography
-                    variant='subtitle2'
-                    sx={{ fontWeight: 'bold', color: '#555', mb: 0.5 }}
-                  >
-                    Model:
-                  </Typography>
-                  <Chip
-                    label={answerModelMetadata.model}
-                    size='small'
-                    color='primary'
-                    variant='outlined'
-                  />
-                </Box>
-
-                <Box sx={{ mb: 2 }}>
-                  <Typography
-                    variant='subtitle2'
-                    sx={{ fontWeight: 'bold', color: '#555', mb: 0.5 }}
-                  >
-                    Created:
-                  </Typography>
-                  <Typography variant='body2' sx={{ color: '#666' }}>
-                    {formatTimestamp(answerModelMetadata.created)}
-                  </Typography>
-                </Box>
-
-                <Box>
-                  <Typography
-                    variant='subtitle2'
-                    sx={{ fontWeight: 'bold', color: '#555', mb: 1 }}
-                  >
-                    Token Usage:
-                  </Typography>
-                  <Box
-                    sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
-                  >
-                    <Box
-                      sx={{ display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography variant='body2'>Prompt tokens:</Typography>
-                      <Chip
-                        label={answerModelMetadata.usage.prompt_tokens}
-                        size='small'
-                        sx={{ minWidth: '50px' }}
-                      />
-                    </Box>
-                    <Box
-                      sx={{ display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography variant='body2'>
-                        Completion tokens:
-                      </Typography>
-                      <Chip
-                        label={answerModelMetadata.usage.completion_tokens}
-                        size='small'
-                        sx={{ minWidth: '50px' }}
-                      />
-                    </Box>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        pt: 1,
-                        borderTop: '1px solid #eee',
-                      }}
-                    >
-                      <Typography variant='body2' sx={{ fontWeight: 'bold' }}>
-                        Total tokens:
-                      </Typography>
-                      <Chip
-                        label={answerModelMetadata.usage.total_tokens}
-                        size='small'
-                        color='secondary'
-                        sx={{ minWidth: '50px', fontWeight: 'bold' }}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            )}
-          </ModalContent>
-        </Modal>
       </ContentWrapper>
     </StyledContainer>
   );
