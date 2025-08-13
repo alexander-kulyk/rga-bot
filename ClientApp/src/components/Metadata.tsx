@@ -44,7 +44,7 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
         Response Metadata
       </Typography>
 
-      <Box sx={{ mb: 1 }}>
+      <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
         <Typography
           variant='caption'
           sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
@@ -56,7 +56,7 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
         </Typography>
       </Box>
 
-      <Box sx={{ mb: 1 }}>
+      <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
         <Typography
           variant='caption'
           sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
@@ -68,7 +68,7 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
         </Typography>
       </Box>
 
-      <Box sx={{ mb: 1 }}>
+      <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
         <Typography
           variant='caption'
           sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
