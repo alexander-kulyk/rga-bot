@@ -14,7 +14,7 @@ export const getRelevantChunks = async (
   );
   const vectors = documentContent.map((doc) => doc.embedding);
 
-  const store = new MemoryVectorStore(new OpenAIEmbeddings()); // embeddings потрібен, але не буде використовуватись для embed
+  const store = new MemoryVectorStore(new OpenAIEmbeddings());
   await store.addVectors(vectors, docs);
 
   const relevantDocs = await store.similaritySearch(question, topK);

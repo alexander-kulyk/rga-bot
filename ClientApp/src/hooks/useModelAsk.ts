@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 //other
-import { IAskResponse } from '../types';
+import { IAnswerModelMetadata, IModelResponse } from '../types';
 import { model } from '../api';
 
 interface Question {
@@ -11,17 +11,20 @@ interface Question {
 
 interface IModelAsk {
   handleKeyPress: (e: React.KeyboardEvent) => void;
+  answerModelMetadata: IAnswerModelMetadata | null;
   handleSubmit: (e: React.FormEvent) => void;
   setQuestion: (question: string) => void;
   question: string;
-  response: string;
+  answerText: string;
   loading: boolean;
   error: string;
 }
 
 export const useModelAsk = (): IModelAsk => {
   const [question, setQuestion] = useState<string>('');
-  const [response, setResponse] = useState<string>('');
+  const [answerText, setAnswerText] = useState<string>('');
+  const [answerModelMetadata, setAnswerModelMetadata] =
+    useState<IAnswerModelMetadata | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -35,17 +38,23 @@ export const useModelAsk = (): IModelAsk => {
 
     setLoading(true);
     setError('');
-    setResponse('');
+    setAnswerText('');
 
     try {
       const payload: Question = { question: question.trim() };
 
       const axiosResponse = await model.sendAsk(payload);
 
-      const result: IAskResponse = axiosResponse.data;
+      const result: IModelResponse = axiosResponse.data;
 
-      if (result.answer) {
-        setResponse(result.answer);
+      if (result.message) {
+        setAnswerText(result.message);
+        setAnswerModelMetadata({
+          id: result.id,
+          created: result.created,
+          model: result.model,
+          usage: result.usage,
+        });
       } else if (result.error) {
         setError(result.error);
       } else {
@@ -73,11 +82,12 @@ export const useModelAsk = (): IModelAsk => {
   };
 
   return {
+    answerModelMetadata,
     handleKeyPress,
     handleSubmit,
     setQuestion,
+    answerText,
     question,
-    response,
     loading,
     error,
   };

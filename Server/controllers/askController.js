@@ -18,8 +18,14 @@ const askController = async (req, res) => {
       '-createdAt -updatedAt -metadata'
     ).lean();
 
-    const answer = await askOpenAI(documentContent, question);
-    return res.json({ answer });
+    const result = await askOpenAI(documentContent, question);
+    return res.json({
+      message: result.message.content,
+      id: result.id,
+      created: result.created,
+      model: result.model,
+      usage: result.usage,
+    });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

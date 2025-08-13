@@ -57,8 +57,8 @@ function App() {
     handleKeyPress,
     handleSubmit,
     setQuestion,
+    answerText,
     question,
-    response,
     loading,
     error,
   } = useModelAsk();
@@ -85,7 +85,7 @@ function App() {
           </header> */}
 
           {/* Response Display Area */}
-          {response && (
+          {answerText && (
             <ResponseContainer>
               <Typography
                 variant='h6'
@@ -105,7 +105,7 @@ function App() {
                     'system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
                 }}
               >
-                {response}
+                {answerText}
               </Typography>
             </ResponseContainer>
           )}

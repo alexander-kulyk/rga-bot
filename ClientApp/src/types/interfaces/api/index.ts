@@ -1,1 +1,2 @@
-export * from './IAskResponse';
+export * from './IAnswerModelMetadata';
+export * from './IModelResponse';

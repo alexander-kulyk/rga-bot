@@ -2,7 +2,7 @@
 import axios, { AxiosPromise } from 'axios';
 //other
 import { API, jsonPatchConfig } from '../constants';
-import { IAskResponse } from '../types';
+import { IModelResponse } from '../types';
 
 const baseUrl = API.baseUrl;
 
@@ -11,7 +11,7 @@ interface IParams {
 }
 
 export const model = {
-  sendAsk: (question: IParams): AxiosPromise<IAskResponse> => {
+  sendAsk: (question: IParams): AxiosPromise<IModelResponse> => {
     const url = `${baseUrl}${API.ask.method}`;
     return axios.post(url, question, jsonPatchConfig);
   },

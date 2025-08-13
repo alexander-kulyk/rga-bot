@@ -45,7 +45,17 @@ Answer:
       }
     );
 
-    return response.data.choices[0].message.content;
+    return {
+      id: response.data.id,
+      created: response.data.created,
+      model: response.data.model,
+      message: response.data.choices[0].message,
+      usage: {
+        prompt_tokens: response.data.usage.prompt_tokens,
+        completion_tokens: response.data.usage.completion_tokens,
+        total_tokens: response.data.usage.total_tokens,
+      },
+    };
   } catch (err) {
     console.error('OpenAI request failed:', err.response?.data || err.message);
     throw new Error('AI request failed');
