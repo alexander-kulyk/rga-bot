@@ -19,16 +19,22 @@ const TooltipContent = styled(Box)`
 
 export const Metadata: FC<MetadataProps> = ({ metadata }) => {
   const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleString();
+    const date = new Date(timestamp * 1000);
+    return {
+      date: date.toLocaleDateString(),
+      time: date.toLocaleTimeString(),
+    };
   };
 
   if (!metadata) return null;
+
+  const { date, time } = formatTimestamp(metadata.created);
 
   const tooltipContent = (
     <TooltipContent>
       <Typography
         variant='subtitle2'
-        sx={{ fontWeight: 'bold', mb: 1, color: 'white' }}
+        sx={{ fontWeight: 'bold', mb: 1, color: 'black' }}
       >
         Response Metadata
       </Typography>
@@ -36,11 +42,11 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
       <Box sx={{ mb: 1 }}>
         <Typography
           variant='caption'
-          sx={{ fontWeight: 'bold', color: 'rgba(255,255,255,0.8)' }}
+          sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
         >
           Model:
         </Typography>
-        <Typography variant='caption' sx={{ color: 'white' }}>
+        <Typography variant='caption' sx={{ color: 'black' }}>
           {metadata.model}
         </Typography>
       </Box>
@@ -48,12 +54,24 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
       <Box sx={{ mb: 1 }}>
         <Typography
           variant='caption'
-          sx={{ fontWeight: 'bold', color: 'rgba(255,255,255,0.8)' }}
+          sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
         >
-          Created:
+          Created Date:
         </Typography>
-        <Typography variant='caption' sx={{ color: 'white' }}>
-          {formatTimestamp(metadata.created)}
+        <Typography variant='caption' sx={{ color: 'black' }}>
+          {date}
+        </Typography>
+      </Box>
+
+      <Box sx={{ mb: 1 }}>
+        <Typography
+          variant='caption'
+          sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
+        >
+          Created Time:
+        </Typography>
+        <Typography variant='caption' sx={{ color: 'black' }}>
+          {time}
         </Typography>
       </Box>
 
@@ -62,14 +80,14 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
           variant='caption'
           sx={{
             fontWeight: 'bold',
-            color: 'rgba(255,255,255,0.8)',
+            color: 'rgba(0,0,0,0.7)',
             display: 'block',
             mb: 0.5,
           }}
         >
           Token Usage:
         </Typography>
-        <Typography variant='caption' sx={{ color: 'white', display: 'block' }}>
+        <Typography variant='caption' sx={{ color: 'black', display: 'block' }}>
           Prompt: {metadata.usage.prompt_tokens} | Completion:{' '}
           {metadata.usage.completion_tokens} | Total:{' '}
           {metadata.usage.total_tokens}
@@ -83,14 +101,20 @@ export const Metadata: FC<MetadataProps> = ({ metadata }) => {
       title={tooltipContent}
       arrow
       placement='left'
-      sx={{
-        '& .MuiTooltip-tooltip': {
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          maxWidth: 'none',
-          fontSize: '0.75rem',
+      componentsProps={{
+        tooltip: {
+          sx: {
+            backgroundColor: 'rgb(255, 255, 255)',
+            maxWidth: 'none',
+            fontSize: '0.75rem',
+            color: 'black',
+            boxShadow: 3,
+          },
         },
-        '& .MuiTooltip-arrow': {
-          color: 'rgba(255, 255, 255, 0.9)',
+        arrow: {
+          sx: {
+            color: 'rgb(255, 255, 255)',
+          },
         },
       }}
     >
