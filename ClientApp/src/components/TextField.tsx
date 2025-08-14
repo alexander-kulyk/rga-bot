@@ -1,0 +1,141 @@
+import React from 'react';
+import {
+  TextField as MuiTextField,
+  IconButton,
+  Box,
+  CircularProgress,
+} from '@mui/material';
+import Fingerprint from '@mui/icons-material/Fingerprint';
+
+interface TextFieldProps {
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  onKeyPress: (e: React.KeyboardEvent) => void;
+  loading: boolean;
+  disabled?: boolean;
+  placeholder?: string;
+  label?: string;
+}
+
+export const TextField: React.FC<TextFieldProps> = ({
+  value,
+  onChange,
+  onSubmit,
+  onKeyPress,
+  loading,
+  disabled = false,
+  placeholder = 'Type your question here...',
+  label = 'Ask a question about the documentation',
+}) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(e);
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    // Create a synthetic form event for the button click
+    const syntheticEvent = {
+      preventDefault: () => {},
+      currentTarget: e.currentTarget,
+      target: e.target,
+      type: 'submit',
+      bubbles: true,
+      cancelable: true,
+      timeStamp: Date.now(),
+      isTrusted: false,
+    } as React.FormEvent;
+
+    onSubmit(syntheticEvent);
+  };
+
+  return (
+    <Box component='form' onSubmit={handleSubmit}>
+      <MuiTextField
+        fullWidth
+        multiline
+        rows={3}
+        variant='outlined'
+        label={label}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyPress={onKeyPress}
+        disabled={loading || disabled}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '12px',
+            '& fieldset': {
+              borderColor: '#ccc',
+            },
+            '&:hover fieldset': {
+              borderColor: '#ccc !important',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#ccc !important',
+              borderWidth: '1px !important',
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#ccc !important',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#ccc !important',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#ccc !important',
+              borderWidth: '1px !important',
+            },
+            '& textarea': {
+              '&:focus': {
+                outline: 'none !important',
+                boxShadow: 'none !important',
+              },
+            },
+            '& input': {
+              '&:focus': {
+                outline: 'none !important',
+                boxShadow: 'none !important',
+              },
+            },
+          },
+          '& .MuiInputLabel-root': {
+            color: '#666',
+            fontFamily:
+              'system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+            '&.Mui-focused': {
+              color: '#666 !important',
+            },
+          },
+          '& .MuiOutlinedInput-input': {
+            fontFamily:
+              'system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+          },
+        }}
+        InputProps={{
+          endAdornment: (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              {loading && <CircularProgress size={20} />}
+              <IconButton
+                type='submit'
+                disabled={loading || !value.trim()}
+                sx={{
+                  color: '#666',
+                  padding: '8px',
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                  },
+                  '&:disabled': {
+                    color: '#ccc',
+                  },
+                }}
+                onClick={handleButtonClick}
+              >
+                <Fingerprint />
+              </IconButton>
+            </Box>
+          ),
+        }}
+      />
+    </Box>
+  );
+};
