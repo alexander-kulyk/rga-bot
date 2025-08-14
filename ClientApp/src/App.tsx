@@ -2,7 +2,7 @@
 import { Alert, TextField, ResponseContainer, Footer } from './components';
 import * as S from './styled';
 //other
-import { useModelAsk } from './hooks';
+import { useModelAsk, useUploadFile } from './hooks';
 import './App.css';
 
 // Styled components
@@ -19,6 +19,8 @@ function App() {
     error,
   } = useModelAsk();
 
+  const { uploading, handleFileUpload } = useUploadFile();
+
   return (
     <S.StyledContainer>
       <S.ContentWrapper>
@@ -34,6 +36,9 @@ function App() {
             onSubmit={handleSubmit}
             onKeyPress={handleKeyPress}
             loading={loading}
+            onFloatingButtonClick={handleFileUpload}
+            floatingButtonDisabled={uploading || loading}
+            uploading={uploading}
           />
           <Footer />
         </S.StyledPaper>

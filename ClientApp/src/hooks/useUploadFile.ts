@@ -6,6 +6,7 @@ import { file } from '../api';
 
 interface IUploadFile {
   uploadFile: (selectedFile: File) => Promise<void>;
+  handleFileUpload: () => void;
   uploading: boolean;
   uploadError: string;
   uploadSuccess: boolean;
@@ -49,8 +50,22 @@ export const useUploadFile = (): IUploadFile => {
     }
   };
 
+  const handleFileUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.docx';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        await uploadFile(file);
+      }
+    };
+    input.click();
+  };
+
   return {
     uploadFile,
+    handleFileUpload,
     uploading,
     uploadError,
     uploadSuccess,
