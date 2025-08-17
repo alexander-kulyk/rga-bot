@@ -7,6 +7,7 @@ const askController = async (req, res) => {
   const { question } = req.body;
 
   const ManualChunk = getChunkModel('dfUserManualChunks');
+  const ModelConfigs = getModelConfigsModel();
 
   if (!question || !question.trim()) {
     return res.status(400).json({ error: 'Question is required' });

@@ -1,18 +1,17 @@
 //core
 import express from 'express';
-import cors from 'cors';
+import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
-
-// Import middlewares
+import cors from 'cors';
+// middlewares
 import rateLimiter from './middlewares/rateLimiter.js';
 import logger from './middlewares/logger.js';
-
-// Import routes
+//routes
+import modelConfigsRoutes from './routes/modelConfigs.js';
+import uploadRoutes from './routes/upload.js';
 import wikiRoutes from './routes/wiki.js';
 import askRoutes from './routes/ask.js';
-import uploadRoutes from './routes/upload.js';
 
 // Load environment variables
 dotenv.config();
@@ -34,6 +33,7 @@ app.use(rateLimiter); // Rate limiting middleware
 app.use('/api/wiki', wikiRoutes);
 app.use('/api/ask', askRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/model-configs', modelConfigsRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {

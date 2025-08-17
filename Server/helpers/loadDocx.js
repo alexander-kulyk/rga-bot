@@ -6,6 +6,7 @@ import {
 import mammoth from 'mammoth';
 //other
 import getChunkModel from '../models/manualChunkSchema.js';
+import getFileOptionsModel from '../models/fileOptionsSchema.js';
 import createVectors from './createVectors.js';
 
 // Load and extract plain text from the DOCX file
@@ -16,7 +17,10 @@ const loadDocx = async (buffer, fileName) => {
     .replace(/[^a-z0-9]+/g, '_')
     .replace(/^_|_$/g, '');
 
+  const optionName = `${collName}_fileOption`;
+
   const ChunkModel = getChunkModel(collName);
+  const FileOptionsModel = getFileOptionsModel();
 
   // const splitter = new RecursiveCharacterTextSplitter({
   //   chunkSize: 1000, // target ~1000 characters per chunk
@@ -37,6 +41,12 @@ const loadDocx = async (buffer, fileName) => {
     const splittedDocument = await splitter.createDocuments([result.value]);
 
     const documentsWithVectors = await createVectors(splittedDocument);
+
+    await FileOptionsModel.insertMany({
+      name: optionName,
+      isDefault: false,
+      tags: [],
+    });
 
     await ChunkModel.insertMany(
       documentsWithVectors.map((doc, i) => ({
