@@ -12,7 +12,7 @@ export const getModelConfigs = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: configs,
+      configs,
       message: 'Model configurations retrieved successfully',
     });
   } catch (error) {

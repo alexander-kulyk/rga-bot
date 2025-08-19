@@ -8,6 +8,7 @@ import {
   IconButton,
   Tooltip,
   Box,
+  ClickAwayListener,
 } from '@mui/material';
 import Fingerprint from '@mui/icons-material/Fingerprint';
 import { SettingsButton } from './SettingsButton';
@@ -44,19 +45,29 @@ export const TextField: React.FC<TextFieldProps> = ({
   onFloatingButtonClick,
   floatingButtonDisabled = false,
   uploading = false,
+  onSettingsClick,
   settingsDisabled = false,
   modalConfigData,
 }) => {
-  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
-  const handleSettingsClick = () => {
-    setTooltipOpen(true);
+  const handleSettingsButtonClick = () => {
+    setTooltipOpen(!tooltipOpen);
+    if (onSettingsClick) {
+      onSettingsClick();
+    }
+  };
+
+  const handleTooltipClose = () => {
+    setTooltipOpen(false);
   };
 
   const formatModelConfigTooltip = () => {
     if (!modalConfigData) {
       return 'No model configuration available';
     }
+
+    console.log('modalConfigData', modalConfigData);
 
     return (
       <Box>
@@ -228,31 +239,39 @@ export const TextField: React.FC<TextFieldProps> = ({
             disabled={floatingButtonDisabled}
             variant='relative'
           />
-          <Tooltip
-            title={formatModelConfigTooltip()}
-            open={tooltipOpen}
-            onClose={() => setTooltipOpen(false)}
-            onOpen={() => setTooltipOpen(true)}
-            placement='top'
-            arrow
-            componentsProps={{
-              tooltip: {
-                sx: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                  fontSize: '0.75rem',
-                  maxWidth: 280,
-                  padding: '12px',
+          <ClickAwayListener onClickAway={handleTooltipClose}>
+            <Tooltip
+              title={formatModelConfigTooltip()}
+              open={tooltipOpen}
+              placement='top'
+              arrow
+              disableHoverListener
+              disableFocusListener
+              disableTouchListener
+              PopperProps={{
+                disablePortal: true,
+              }}
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    fontSize: '0.75rem',
+                    maxWidth: 280,
+                    padding: '12px',
+                  },
                 },
-              },
-            }}
-          >
-            <SettingsButton
-              onClick={handleSettingsClick}
-              disabled={settingsDisabled}
-              position='relative'
-              size='small'
-            />
-          </Tooltip>
+              }}
+            >
+              <Box>
+                <SettingsButton
+                  onClick={handleSettingsButtonClick}
+                  disabled={settingsDisabled}
+                  position='relative'
+                  size='small'
+                />
+              </Box>
+            </Tooltip>
+          </ClickAwayListener>
         </Box>
       )}
     </Box>
