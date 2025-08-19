@@ -1,13 +1,19 @@
-import React from 'react';
+//core
+import React, { useState } from 'react';
 import {
   TextField as MuiTextField,
-  IconButton,
-  Box,
   CircularProgress,
   LinearProgress,
+  Typography,
+  IconButton,
+  Tooltip,
+  Box,
 } from '@mui/material';
 import Fingerprint from '@mui/icons-material/Fingerprint';
+import { SettingsButton } from './SettingsButton';
 import { FloatingButton } from './FloatingButton';
+//other
+import { IModelConfigs } from '../types';
 
 interface TextFieldProps {
   value: string;
@@ -18,11 +24,12 @@ interface TextFieldProps {
   disabled?: boolean;
   placeholder?: string;
   label?: string;
-  // FloatingButton props
   onFloatingButtonClick?: () => void;
   floatingButtonDisabled?: boolean;
-  // Upload progress props
   uploading?: boolean;
+  onSettingsClick?: () => void;
+  settingsDisabled?: boolean;
+  modalConfigData?: IModelConfigs | null;
 }
 
 export const TextField: React.FC<TextFieldProps> = ({
@@ -37,7 +44,37 @@ export const TextField: React.FC<TextFieldProps> = ({
   onFloatingButtonClick,
   floatingButtonDisabled = false,
   uploading = false,
+  settingsDisabled = false,
+  modalConfigData,
 }) => {
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const handleSettingsClick = () => {
+    setTooltipOpen(true);
+  };
+
+  const formatModelConfigTooltip = () => {
+    if (!modalConfigData) {
+      return 'No model configuration available';
+    }
+
+    return (
+      <Box>
+        <Typography variant='body2' sx={{ fontWeight: 'bold', mb: 1 }}>
+          Model Configuration:
+        </Typography>
+        <Typography variant='body2'>Model: {modalConfigData.model}</Typography>
+        <Typography variant='body2'>
+          Temperature: {modalConfigData.temperature}
+        </Typography>
+        <Typography variant='body2'>Top P: {modalConfigData.top_p}</Typography>
+        <Typography variant='body2'>
+          Max Tokens: {modalConfigData.max_tokens}
+        </Typography>
+      </Box>
+    );
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(e);
@@ -181,12 +218,41 @@ export const TextField: React.FC<TextFieldProps> = ({
             bottom: '8px',
             left: '8px',
             zIndex: 1,
+            display: 'flex',
+            gap: 1,
+            alignItems: 'center',
           }}
         >
           <FloatingButton
             onClick={onFloatingButtonClick}
             disabled={floatingButtonDisabled}
+            variant='relative'
           />
+          <Tooltip
+            title={formatModelConfigTooltip()}
+            open={tooltipOpen}
+            onClose={() => setTooltipOpen(false)}
+            onOpen={() => setTooltipOpen(true)}
+            placement='top'
+            arrow
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                  fontSize: '0.75rem',
+                  maxWidth: 280,
+                  padding: '12px',
+                },
+              },
+            }}
+          >
+            <SettingsButton
+              onClick={handleSettingsClick}
+              disabled={settingsDisabled}
+              position='relative'
+              size='small'
+            />
+          </Tooltip>
         </Box>
       )}
     </Box>

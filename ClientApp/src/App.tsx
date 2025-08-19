@@ -38,6 +38,8 @@ function App() {
             onFloatingButtonClick={handleFileUpload}
             floatingButtonDisabled={uploading || loading}
             uploading={uploading}
+            settingsDisabled={isFetchModalConfigLoading}
+            modalConfigData={modalConfigData}
           />
           <Footer />
         </S.StyledPaper>

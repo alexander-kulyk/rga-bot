@@ -5,3 +5,4 @@ export * from './Metadata';
 export * from './Footer';
 export * from './Alert';
 export { FloatingButton } from './FloatingButton';
+export { SettingsButton } from './SettingsButton';

@@ -1,7 +1,10 @@
+//core
 import React from 'react';
 import { Typography, Box } from '@mui/material';
+//components
 import styled from 'styled-components';
 import { Metadata } from './Metadata';
+//other
 import { IAnswerModelMetadata } from '../types';
 
 interface ResponseContainerProps {
