@@ -6,4 +6,7 @@ export const API = {
   upload: {
     method: '/upload',
   },
+  modelConfigs: {
+    method: '/model-configs',
+  },
 };
