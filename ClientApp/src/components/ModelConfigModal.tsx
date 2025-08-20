@@ -1,7 +1,10 @@
 //core
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Typography, Tooltip, Box, ClickAwayListener } from '@mui/material';
+import { useForm } from 'react-hook-form';
+//components
 import { SettingsButton } from './SettingsButton';
+import { RangeController } from './Controllers';
 //other
 import { IModelConfigs } from '../types';
 
@@ -11,6 +14,14 @@ interface ModelConfigModalProps {
   disabled?: boolean;
 }
 
+// Local form shape used by react-hook-form
+interface IModelConfigForm {
+  model: string;
+  temperature: number;
+  topP: number;
+  maxTokens: number;
+}
+
 export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
   modalConfigData,
   onSettingsClick,
@@ -18,28 +29,137 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
 }) => {
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
+  const defaultValues = useMemo<IModelConfigForm>(
+    () => ({
+      model: modalConfigData?.model ?? '',
+      temperature: modalConfigData?.temperature ?? 1,
+      topP: modalConfigData?.top_p ?? 1,
+      maxTokens: modalConfigData?.max_tokens ?? 1024,
+    }),
+    [modalConfigData]
+  );
+
+  const { control, reset, watch } = useForm<IModelConfigForm>({
+    defaultValues,
+    mode: 'onChange',
+  });
+
+  // Keep form in sync when modalConfigData updates
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
+
   const handleSettingsButtonClick = () => {
-    setTooltipOpen(!tooltipOpen);
-    if (onSettingsClick) {
-      onSettingsClick();
-    }
+    setTooltipOpen((prev) => !prev);
+    onSettingsClick?.();
   };
 
   const handleTooltipClose = () => {
     setTooltipOpen(false);
   };
 
+  const renderForm = () => (
+    <Box
+      sx={{
+        padding: '12px',
+        maxWidth: '320px',
+        fontFamily:
+          'system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+      }}
+    >
+      <Typography
+        variant='subtitle2'
+        sx={{ fontWeight: 'bold', mb: 1, color: 'black' }}
+      >
+        Model Configuration
+      </Typography>
+
+      <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
+        <Typography
+          variant='caption'
+          sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
+        >
+          Model:
+        </Typography>
+        <Typography variant='caption' sx={{ color: 'black' }}>
+          {watch('model')}
+        </Typography>
+      </Box>
+
+      <Box sx={{ mb: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+          <Typography
+            variant='caption'
+            sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
+          >
+            Temperature
+          </Typography>
+        </Box>
+        <RangeController
+          control={control}
+          name={'temperature'}
+          minValue={0}
+          maxValue={2}
+          step={0.1}
+          shiftStep={0.05}
+          size='small'
+          valueLabelDisplay='auto'
+          defaultValue={defaultValues.temperature}
+          disabled={disabled}
+        />
+      </Box>
+
+      <Box sx={{ mb: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+          <Typography
+            variant='caption'
+            sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
+          >
+            Top P
+          </Typography>
+        </Box>
+        <RangeController
+          control={control}
+          name={'topP'}
+          minValue={0}
+          maxValue={1}
+          step={0.05}
+          shiftStep={0.01}
+          size='small'
+          valueLabelDisplay='auto'
+          defaultValue={defaultValues.topP}
+          disabled={disabled}
+        />
+      </Box>
+      <Box>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+          <Typography
+            variant='caption'
+            sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
+          >
+            Max Tokens
+          </Typography>
+        </Box>
+        <RangeController
+          control={control}
+          name={'maxTokens'}
+          minValue={128}
+          maxValue={4096}
+          step={16}
+          shiftStep={64}
+          size='small'
+          valueLabelDisplay='auto'
+          defaultValue={defaultValues.maxTokens}
+          disabled={disabled}
+        />
+      </Box>
+    </Box>
+  );
+
   const formatModelConfigTooltip = () => {
     if (!modalConfigData) {
       return (
-        <Box
-          sx={{
-            padding: '12px',
-            maxWidth: '300px',
-            fontFamily:
-              'system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-          }}
-        >
+        <Box sx={{ padding: '12px', maxWidth: '300px' }}>
           <Typography variant='caption' sx={{ color: 'black' }}>
             No model configuration available
           </Typography>
@@ -47,71 +167,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
       );
     }
 
-    return (
-      <Box
-        sx={{
-          padding: '12px',
-          maxWidth: '300px',
-          fontFamily:
-            'system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-        }}
-      >
-        <Typography
-          variant='subtitle2'
-          sx={{ fontWeight: 'bold', mb: 1, color: 'black' }}
-        >
-          Model Configuration
-        </Typography>
-
-        <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
-          <Typography
-            variant='caption'
-            sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
-          >
-            Model:
-          </Typography>
-          <Typography variant='caption' sx={{ color: 'black' }}>
-            {modalConfigData.model}
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
-          <Typography
-            variant='caption'
-            sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
-          >
-            Temperature:
-          </Typography>
-          <Typography variant='caption' sx={{ color: 'black' }}>
-            {modalConfigData.temperature}
-          </Typography>
-        </Box>
-
-        <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
-          <Typography
-            variant='caption'
-            sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
-          >
-            Top P:
-          </Typography>
-          <Typography variant='caption' sx={{ color: 'black' }}>
-            {modalConfigData.top_p}
-          </Typography>
-        </Box>
-
-        <Box>
-          <Typography
-            variant='caption'
-            sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
-          >
-            Max Tokens:
-          </Typography>
-          <Typography variant='caption' sx={{ color: 'black' }}>
-            {modalConfigData.max_tokens}
-          </Typography>
-        </Box>
-      </Box>
-    );
+    return renderForm();
   };
 
   return (
@@ -138,9 +194,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
             },
           },
           arrow: {
-            sx: {
-              color: 'rgb(255, 255, 255)',
-            },
+            sx: { color: 'rgb(255, 255, 255)' },
           },
         }}
       >

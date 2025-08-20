@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "update-wiki": "node scripts/update-wiki-chunks.js",
     "test-wiki": "node test-wiki.js",
-    "validate": "node validate-refactoring.js"
+    "validate": "node validate-refactoring.js",
+    "ts_compile": "npx tsc -w"
   },
   "keywords": [
     "express",
