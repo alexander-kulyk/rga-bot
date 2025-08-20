@@ -1,6 +1,12 @@
 //core
 import React, { useEffect, useMemo, useState } from 'react';
-import { Typography, Tooltip, Box, ClickAwayListener } from '@mui/material';
+import {
+  ClickAwayListener,
+  Typography,
+  Tooltip,
+  Button,
+  Box,
+} from '@mui/material';
 import { useForm } from 'react-hook-form';
 //components
 import { SettingsButton } from './SettingsButton';
@@ -12,6 +18,7 @@ interface ModelConfigModalProps {
   modalConfigData?: IModelConfigs | null;
   onSettingsClick?: () => void;
   disabled?: boolean;
+  updateModalConfig: (modalConfigData: IModelConfigs) => Promise<void>;
 }
 
 // Local form shape used by react-hook-form
@@ -26,8 +33,10 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
   modalConfigData,
   onSettingsClick,
   disabled = false,
+  updateModalConfig,
 }) => {
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
+  const [saving, setSaving] = useState<boolean>(false);
 
   const defaultValues = useMemo<IModelConfigForm>(
     () => ({
@@ -39,7 +48,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
     [modalConfigData]
   );
 
-  const { control, reset, watch } = useForm<IModelConfigForm>({
+  const { control, reset, watch, getValues } = useForm<IModelConfigForm>({
     defaultValues,
     mode: 'onChange',
   });
@@ -56,6 +65,22 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
 
   const handleTooltipClose = () => {
     setTooltipOpen(false);
+  };
+
+  const handleApplyChanges = async () => {
+    setSaving(true);
+    const { model, temperature, topP, maxTokens } = getValues();
+
+    const payload: IModelConfigs = {
+      model,
+      temperature,
+      top_p: topP,
+      max_tokens: maxTokens,
+    } as IModelConfigs;
+
+    await updateModalConfig(payload);
+    setTooltipOpen(false);
+    setSaving(false);
   };
 
   const renderForm = () => (
@@ -153,6 +178,17 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
           disabled={disabled}
         />
       </Box>
+
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+        <Button
+          size='small'
+          variant='contained'
+          onClick={handleApplyChanges}
+          disabled={disabled || saving}
+        >
+          {saving ? 'Applying...' : 'Apply changes'}
+        </Button>
+      </Box>
     </Box>
   );
 
@@ -175,7 +211,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
       <Tooltip
         title={formatModelConfigTooltip()}
         open={tooltipOpen}
-        placement='left'
+        placement='top'
         arrow
         disableHoverListener
         disableFocusListener

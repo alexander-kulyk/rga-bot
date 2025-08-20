@@ -18,7 +18,8 @@ function App() {
   } = useModelAsk();
 
   const { uploading, handleFileUpload } = useUploadFile();
-  const { isFetchModalConfigLoading, modalConfigData } = useModelConfig();
+  const { isFetchModalConfigLoading, modalConfigData, updateModalConfig } =
+    useModelConfig();
 
   return (
     <S.StyledContainer>
@@ -40,6 +41,7 @@ function App() {
             uploading={uploading}
             settingsDisabled={isFetchModalConfigLoading}
             modalConfigData={modalConfigData}
+            updateModalConfig={updateModalConfig}
           />
           <Footer />
         </S.StyledPaper>

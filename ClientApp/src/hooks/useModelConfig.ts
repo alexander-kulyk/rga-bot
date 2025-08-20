@@ -6,9 +6,10 @@ import { modelConfigs } from '../api/modalConfigs';
 import { IModelConfigs } from '../types';
 
 interface IUseModelConfig {
+  updateModalConfig: (modalConfigData: IModelConfigs) => Promise<void>;
+  modalConfigData: IModelConfigs | null;
   fetchModalConfig: () => Promise<void>;
   isFetchModalConfigLoading: boolean;
-  modalConfigData: IModelConfigs | null;
   error: string | null;
 }
 
@@ -38,13 +39,31 @@ export const useModelConfig = (): IUseModelConfig => {
     }
   };
 
+  const updateModalConfig = async (modalConfigData: IModelConfigs) => {
+    setIsFetchModalConfigLoading(true);
+    setError(null);
+
+    try {
+      await modelConfigs.update(modalConfigData);
+    } catch (err) {
+      setError(
+        axios.isAxiosError(err)
+          ? err.response?.data?.message || err.message
+          : 'An unexpected error occurred'
+      );
+    } finally {
+      setIsFetchModalConfigLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchModalConfig();
   }, []);
 
   return {
-    fetchModalConfig,
     isFetchModalConfigLoading,
+    updateModalConfig,
+    fetchModalConfig,
     modalConfigData,
     error,
   };

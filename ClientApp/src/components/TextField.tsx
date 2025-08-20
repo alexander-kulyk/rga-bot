@@ -29,6 +29,7 @@ interface TextFieldProps {
   onSettingsClick?: () => void;
   settingsDisabled?: boolean;
   modalConfigData?: IModelConfigs | null;
+  updateModalConfig: (modalConfigData: IModelConfigs) => Promise<void>;
 }
 
 export const TextField: React.FC<TextFieldProps> = ({
@@ -46,6 +47,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   onSettingsClick,
   settingsDisabled = false,
   modalConfigData,
+  updateModalConfig,
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -204,6 +206,7 @@ export const TextField: React.FC<TextFieldProps> = ({
             modalConfigData={modalConfigData}
             onSettingsClick={onSettingsClick}
             disabled={settingsDisabled}
+            updateModalConfig={updateModalConfig}
           />
         </Box>
       )}
