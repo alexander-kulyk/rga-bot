@@ -26,8 +26,7 @@ export const useModelConfig = (): IUseModelConfig => {
 
     try {
       const response = await modelConfigs.get();
-      setModalConfigData(response.data);
-      console.log('response', response);
+      setModalConfigData(response.data.configs[0]);
     } catch (err) {
       setError(
         axios.isAxiosError(err)

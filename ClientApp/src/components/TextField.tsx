@@ -1,17 +1,15 @@
 //core
-import React, { useState } from 'react';
+import React from 'react';
 import {
   TextField as MuiTextField,
   CircularProgress,
   LinearProgress,
-  Typography,
   IconButton,
-  Tooltip,
   Box,
-  ClickAwayListener,
 } from '@mui/material';
 import Fingerprint from '@mui/icons-material/Fingerprint';
-import { SettingsButton } from './SettingsButton';
+//components
+import { ModelConfigModal } from './ModelConfigModal';
 import { FloatingButton } from './FloatingButton';
 //other
 import { IModelConfigs } from '../types';
@@ -49,43 +47,6 @@ export const TextField: React.FC<TextFieldProps> = ({
   settingsDisabled = false,
   modalConfigData,
 }) => {
-  const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
-
-  const handleSettingsButtonClick = () => {
-    setTooltipOpen(!tooltipOpen);
-    if (onSettingsClick) {
-      onSettingsClick();
-    }
-  };
-
-  const handleTooltipClose = () => {
-    setTooltipOpen(false);
-  };
-
-  const formatModelConfigTooltip = () => {
-    if (!modalConfigData) {
-      return 'No model configuration available';
-    }
-
-    console.log('modalConfigData', modalConfigData);
-
-    return (
-      <Box>
-        <Typography variant='body2' sx={{ fontWeight: 'bold', mb: 1 }}>
-          Model Configuration:
-        </Typography>
-        <Typography variant='body2'>Model: {modalConfigData.model}</Typography>
-        <Typography variant='body2'>
-          Temperature: {modalConfigData.temperature}
-        </Typography>
-        <Typography variant='body2'>Top P: {modalConfigData.top_p}</Typography>
-        <Typography variant='body2'>
-          Max Tokens: {modalConfigData.max_tokens}
-        </Typography>
-      </Box>
-    );
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(e);
@@ -239,39 +200,11 @@ export const TextField: React.FC<TextFieldProps> = ({
             disabled={floatingButtonDisabled}
             variant='relative'
           />
-          <ClickAwayListener onClickAway={handleTooltipClose}>
-            <Tooltip
-              title={formatModelConfigTooltip()}
-              open={tooltipOpen}
-              placement='top'
-              arrow
-              disableHoverListener
-              disableFocusListener
-              disableTouchListener
-              PopperProps={{
-                disablePortal: true,
-              }}
-              componentsProps={{
-                tooltip: {
-                  sx: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    fontSize: '0.75rem',
-                    maxWidth: 280,
-                    padding: '12px',
-                  },
-                },
-              }}
-            >
-              <Box>
-                <SettingsButton
-                  onClick={handleSettingsButtonClick}
-                  disabled={settingsDisabled}
-                  position='relative'
-                  size='small'
-                />
-              </Box>
-            </Tooltip>
-          </ClickAwayListener>
+          <ModelConfigModal
+            modalConfigData={modalConfigData}
+            onSettingsClick={onSettingsClick}
+            disabled={settingsDisabled}
+          />
         </Box>
       )}
     </Box>

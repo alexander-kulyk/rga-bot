@@ -1,7 +1,7 @@
-export interface IModelConfigs {
-  _id?: string;
-  model: string;
-  temperature: number;
-  top_p: number;
-  max_tokens: number;
+import { IModelConfigs } from './IModelConfigs';
+
+export interface IModelConfigsResponse {
+  configs: IModelConfigs[];
+  message: string;
+  success: boolean;
 }
