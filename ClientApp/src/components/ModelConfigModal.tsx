@@ -62,7 +62,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
     <Box
       sx={{
         padding: '12px',
-        maxWidth: '320px',
+        width: '250px',
         fontFamily:
           'system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
       }}
@@ -159,7 +159,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
   const formatModelConfigTooltip = () => {
     if (!modalConfigData) {
       return (
-        <Box sx={{ padding: '12px', maxWidth: '300px' }}>
+        <Box sx={{ padding: '12px', width: '350px' }}>
           <Typography variant='caption' sx={{ color: 'black' }}>
             No model configuration available
           </Typography>
@@ -175,7 +175,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
       <Tooltip
         title={formatModelConfigTooltip()}
         open={tooltipOpen}
-        placement='top'
+        placement='left'
         arrow
         disableHoverListener
         disableFocusListener
@@ -187,7 +187,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
           tooltip: {
             sx: {
               backgroundColor: 'rgb(255, 255, 255)',
-              maxWidth: 'none',
+              maxWidth: '350px',
               fontSize: '0.75rem',
               color: 'black',
               boxShadow: 3,
