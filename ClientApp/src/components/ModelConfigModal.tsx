@@ -1,5 +1,5 @@
 //core
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ClickAwayListener,
   Typography,
@@ -38,6 +38,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
 }) => {
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   const defaultValues = useMemo<IModelConfigForm>(
     () => ({
@@ -209,41 +210,45 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
 
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
-      <Tooltip
-        title={formatModelConfigTooltip()}
-        open={tooltipOpen}
-        placement='top'
-        arrow
-        disableHoverListener
-        disableFocusListener
-        disableTouchListener
-        PopperProps={{
-          disablePortal: true,
-        }}
-        componentsProps={{
-          tooltip: {
-            sx: {
-              backgroundColor: 'rgb(255, 255, 255)',
-              maxWidth: '350px',
-              fontSize: '0.75rem',
-              color: 'black',
-              boxShadow: 3,
+      <Box ref={wrapperRef} sx={{ display: 'inline-block' }}>
+        <Tooltip
+          title={formatModelConfigTooltip()}
+          open={tooltipOpen}
+          placement='top'
+          arrow
+          disableHoverListener
+          disableFocusListener
+          disableTouchListener
+          PopperProps={{
+            // Render the popper inside our wrapper so ClickAwayListener doesn't treat
+            // interactions with the tooltip content as outside clicks.
+            container: wrapperRef.current,
+          }}
+          componentsProps={{
+            tooltip: {
+              sx: {
+                backgroundColor: 'rgb(255, 255, 255)',
+                maxWidth: '350px',
+                fontSize: '0.75rem',
+                color: 'black',
+                boxShadow: 3,
+              },
             },
-          },
-          arrow: {
-            sx: { color: 'rgb(255, 255, 255)' },
-          },
-        }}
-      >
-        <Box>
-          <SettingsButton
-            onClick={handleSettingsButtonClick}
-            disabled={disabled}
-            position='relative'
-            size='small'
-          />
-        </Box>
-      </Tooltip>
+            arrow: {
+              sx: { color: 'rgb(255, 255, 255)' },
+            },
+          }}
+        >
+          <Box>
+            <SettingsButton
+              onClick={handleSettingsButtonClick}
+              disabled={disabled}
+              position='relative'
+              size='small'
+            />
+          </Box>
+        </Tooltip>
+      </Box>
     </ClickAwayListener>
   );
 };

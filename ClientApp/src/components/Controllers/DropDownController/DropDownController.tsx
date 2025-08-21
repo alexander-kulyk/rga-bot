@@ -64,6 +64,7 @@ export const DropdownController = <TFieldValues extends FieldValues>({
             label={label}
             displayEmpty={displayEmpty}
             inputProps={{ 'aria-label': label || id || (name as string) }}
+            MenuProps={{ disablePortal: true }}
           >
             {displayEmpty && placeholder && (
               <MenuItem value=''>

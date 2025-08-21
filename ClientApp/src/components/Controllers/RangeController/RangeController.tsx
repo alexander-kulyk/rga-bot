@@ -54,8 +54,14 @@ export const RangeController = <TFieldValues extends FieldValues>({
     setCurrentStep(step);
   }, [step]);
 
+  const stopClickAway = useCallback((e: React.SyntheticEvent) => {
+    e.stopPropagation();
+  }, []);
+
   const commonProps = useMemo<Partial<SliderProps>>(
     () => ({
+      onTouchStart: stopClickAway,
+      onMouseDown: stopClickAway,
       onKeyDown: handleKeyDown,
       onKeyUp: handleKeyUp,
       valueLabelDisplay,
@@ -70,6 +76,7 @@ export const RangeController = <TFieldValues extends FieldValues>({
     [
       valueLabelDisplay,
       handleKeyDown,
+      stopClickAway,
       currentStep,
       handleKeyUp,
       minDistance,
@@ -96,9 +103,6 @@ export const RangeController = <TFieldValues extends FieldValues>({
             field.onChange(value);
             onChangeProp?.(event, value as number | number[]);
           }}
-          // onChangeCommitted={(event, value) => {
-          //   field.onBlur();
-          // }}
         />
       )}
     />
