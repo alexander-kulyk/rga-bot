@@ -10,8 +10,9 @@ import {
 import { useForm } from 'react-hook-form';
 //components
 import { SettingsButton } from './SettingsButton';
-import { RangeController } from './Controllers';
+import { RangeController, DropdownController } from './Controllers';
 //other
+import { modelOptions } from '../constants';
 import { IModelConfigs } from '../types';
 
 interface ModelConfigModalProps {
@@ -48,7 +49,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
     [modalConfigData]
   );
 
-  const { control, reset, watch, getValues } = useForm<IModelConfigForm>({
+  const { control, reset, getValues } = useForm<IModelConfigForm>({
     defaultValues,
     mode: 'onChange',
   });
@@ -99,16 +100,16 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
         Model Configuration
       </Typography>
 
-      <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between' }}>
-        <Typography
-          variant='caption'
-          sx={{ fontWeight: 'bold', color: 'rgba(0,0,0,0.7)' }}
-        >
-          Model:
-        </Typography>
-        <Typography variant='caption' sx={{ color: 'black' }}>
-          {watch('model')}
-        </Typography>
+      <Box sx={{ mb: 2 }}>
+        <DropdownController
+          control={control}
+          name={'model'}
+          options={modelOptions}
+          label='Model'
+          placeholder='Select model'
+          size='small'
+          disabled={disabled}
+        />
       </Box>
 
       <Box sx={{ mb: 2 }}>
