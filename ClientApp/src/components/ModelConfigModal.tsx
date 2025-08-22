@@ -74,6 +74,7 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
     const { model, temperature, topP, maxTokens } = getValues();
 
     const payload: IModelConfigs = {
+      _id: modalConfigData?._id ?? '',
       model,
       temperature,
       top_p: topP,

@@ -29,7 +29,7 @@ export const getModelConfigs = async (req, res) => {
 // Update or create model configuration
 export const updateModelConfig = async (req, res) => {
   try {
-    const { model, temperature, top_p, max_tokens } = req.body;
+    const { model, temperature, top_p, max_tokens, _id } = req.body;
 
     // Validate required fields
     if (
@@ -83,21 +83,51 @@ export const updateModelConfig = async (req, res) => {
       });
     }
 
-    // Find existing config for this model and update, or create new one
-    const updatedConfig = await ModelConfigs.findOneAndUpdate(
-      { _id },
-      { model, temperature, top_p, max_tokens },
-      {
-        new: true,
-        upsert: true,
-        runValidators: true,
+    // If _id provided, validate and update existing; else create new
+    if (_id) {
+      if (!mongoose.Types.ObjectId.isValid(_id)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid _id format',
+        });
       }
-    );
 
-    res.status(200).json({
+      const existing = await ModelConfigs.findById(_id);
+      if (!existing) {
+        return res.status(404).json({
+          success: false,
+          message: 'Model configuration not found',
+        });
+      }
+
+      const updatedConfig = await ModelConfigs.findByIdAndUpdate(
+        _id,
+        { model, temperature, top_p, max_tokens },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: updatedConfig,
+        message: 'Model configuration updated successfully',
+      });
+    }
+
+    // No _id -> create new configuration
+    const createdConfig = await ModelConfigs.create({
+      model,
+      temperature,
+      top_p,
+      max_tokens,
+    });
+
+    return res.status(201).json({
       success: true,
-      data: updatedConfig,
-      message: 'Model configuration updated successfully',
+      data: createdConfig,
+      message: 'Model configuration created successfully',
     });
   } catch (error) {
     console.error('Error updating model configuration:', error);
