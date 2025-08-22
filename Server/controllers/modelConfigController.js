@@ -46,7 +46,14 @@ export const updateModelConfig = async (req, res) => {
     }
 
     // Validate model enum
-    const validModels = ['gpt-4o', 'gpt-3.5-turbo', 'gpt-4', 'gpt-5'];
+    const validModels = [
+      'gpt-4o',
+      'gpt-3.5-turbo',
+      'gpt-4',
+      'gpt-5',
+      'gpt-5-mini',
+      'gpt-5-nano',
+    ];
     if (!validModels.includes(model)) {
       return res.status(400).json({
         success: false,
@@ -78,7 +85,7 @@ export const updateModelConfig = async (req, res) => {
 
     // Find existing config for this model and update, or create new one
     const updatedConfig = await ModelConfigs.findOneAndUpdate(
-      { model },
+      { _id },
       { model, temperature, top_p, max_tokens },
       {
         new: true,
