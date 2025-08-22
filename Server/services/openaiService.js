@@ -4,12 +4,14 @@ import axios from 'axios';
 import { getRelevantChunks } from '../helpers/getRelevantChunks.js';
 
 //  Send prompt to OpenAI and return the answer
-const askOpenAI = async (documentContent, question, topK = 10) => {
+const askOpenAI = async (documentContent, question, topK = 10, modelConfig) => {
   const relevantChunks = await getRelevantChunks(
     documentContent,
     question,
     topK
   );
+
+  const { temperature, top_p, max_tokens, model } = modelConfig;
 
   const prompt = `
 Use ONLY the following excerpts to answer. If you don’t know, say so:
@@ -24,7 +26,7 @@ Answer:
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-4o',
+        model,
         messages: [
           {
             role: 'system',
@@ -33,9 +35,9 @@ Answer:
           },
           { role: 'user', content: prompt },
         ],
-        temperature: 0.7,
-        top_p: 0.9,
-        max_tokens: 1024,
+        temperature,
+        top_p,
+        max_tokens,
       },
       {
         headers: {
