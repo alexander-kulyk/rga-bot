@@ -17,8 +17,6 @@ const loadDocx = async (buffer, fileName) => {
     .replace(/[^a-z0-9]+/g, '_')
     .replace(/^_|_$/g, '');
 
-  const optionName = `${collName}_fileOption`;
-
   const ChunkModel = getChunkModel(collName);
   const FileOptionsModel = getFileOptionsModel();
 
@@ -43,7 +41,7 @@ const loadDocx = async (buffer, fileName) => {
     const documentsWithVectors = await createVectors(splittedDocument);
 
     await FileOptionsModel.insertMany({
-      name: optionName,
+      name: collName,
       isDefault: false,
       tags: [],
     });
