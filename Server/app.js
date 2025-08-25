@@ -9,6 +9,7 @@ import rateLimiter from './middlewares/rateLimiter.js';
 import logger from './middlewares/logger.js';
 //routes
 import modelConfigsRoutes from './routes/modelConfigs.js';
+import fileOptionsRoutes from './routes/fileOptions.js';
 import uploadRoutes from './routes/upload.js';
 import wikiRoutes from './routes/wiki.js';
 import askRoutes from './routes/ask.js';
@@ -34,6 +35,7 @@ app.use('/api/wiki', wikiRoutes);
 app.use('/api/ask', askRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/model-configs', modelConfigsRoutes);
+app.use('/api/file-options', fileOptionsRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
