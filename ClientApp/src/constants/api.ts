@@ -9,4 +9,7 @@ export const API = {
   modelConfigs: {
     method: '/model-configs',
   },
+  fileOptions: {
+    method: '/file-options',
+  },
 };

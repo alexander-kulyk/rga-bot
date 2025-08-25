@@ -1,7 +1,6 @@
+import { IResponse } from './Common';
 import { IModelConfigs } from './IModelConfigs';
 
-export interface IModelConfigsResponse {
+export interface IModelConfigsResponse extends IResponse {
   configs: IModelConfigs[];
-  message: string;
-  success: boolean;
 }

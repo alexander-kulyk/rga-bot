@@ -1,7 +1,8 @@
 //core
 import axios, { AxiosPromise } from 'axios';
 //other
-import { API } from '../constants';
+import { API, SETTINGS } from '../constants';
+import { HTTPHeaders } from '../types';
 
 const baseUrl = API.baseUrl;
 
@@ -19,7 +20,7 @@ export const file = {
 
     return axios.post(url, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        [HTTPHeaders.ContentType]: SETTINGS.HEADER_VALUE.FORM_DATA_TYPE,
       },
     });
   },
