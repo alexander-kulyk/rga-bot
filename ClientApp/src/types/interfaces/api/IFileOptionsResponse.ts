@@ -1,12 +1,6 @@
 import { IResponse } from './Common';
-
-interface IOptions {
-  _id: string;
-  name: string;
-  order: number;
-  isDefault: boolean;
-}
+import { IFileOptions } from './IFileOptions';
 
 export interface IFileOptionsResponse extends IResponse {
-  options: IOptions[];
+  options: IFileOptions[];
 }

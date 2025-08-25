@@ -12,7 +12,11 @@ interface IUploadFile {
   uploadSuccess: boolean;
 }
 
-export const useUploadFile = (): IUploadFile => {
+interface IProps {
+  fetchFileOptions: () => Promise<void>;
+}
+
+export const useUploadFile = ({ fetchFileOptions }: IProps): IUploadFile => {
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>('');
   const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
@@ -33,6 +37,7 @@ export const useUploadFile = (): IUploadFile => {
 
       setUploadSuccess(true);
       setUploadError('');
+      await fetchFileOptions();
     } catch (error) {
       console.error('Upload failed:', error);
 
@@ -64,10 +69,10 @@ export const useUploadFile = (): IUploadFile => {
   };
 
   return {
-    uploadFile,
     handleFileUpload,
-    uploading,
-    uploadError,
     uploadSuccess,
+    uploadError,
+    uploadFile,
+    uploading,
   };
 };

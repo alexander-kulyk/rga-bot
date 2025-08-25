@@ -2,7 +2,12 @@
 import { Alert, TextField, ResponseContainer, Footer } from './components';
 import * as S from './styled';
 //other
-import { useModelAsk, useModelConfig, useUploadFile } from './hooks';
+import {
+  useFileOptions,
+  useModelConfig,
+  useUploadFile,
+  useModelAsk,
+} from './hooks';
 import './App.css';
 
 function App() {
@@ -17,7 +22,9 @@ function App() {
     error,
   } = useModelAsk();
 
-  const { uploading, handleFileUpload } = useUploadFile();
+  const { fileOptions, isLoadingFetchFileOptions, fetchFileOptions } =
+    useFileOptions();
+  const { uploading, handleFileUpload } = useUploadFile({ fetchFileOptions });
   const { isFetchModalConfigLoading, modalConfigData, updateModalConfig } =
     useModelConfig();
 
@@ -35,7 +42,9 @@ function App() {
             onChange={setQuestion}
             onSubmit={handleSubmit}
             onKeyPress={handleKeyPress}
-            loading={loading || isFetchModalConfigLoading}
+            loading={
+              loading || isFetchModalConfigLoading || isLoadingFetchFileOptions
+            }
             onFloatingButtonClick={handleFileUpload}
             floatingButtonDisabled={uploading || loading}
             uploading={uploading}
