@@ -108,7 +108,6 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
           name={'model'}
           options={modelOptions}
           label='Model'
-          placeholder='Select model'
           size='small'
           disabled={disabled}
         />
