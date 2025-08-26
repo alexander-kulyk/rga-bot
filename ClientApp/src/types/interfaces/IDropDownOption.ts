@@ -1,5 +1,5 @@
 export interface IDropdownOption {
-  label: string;
+  id: string;
   value: string;
   disabled?: boolean;
 }

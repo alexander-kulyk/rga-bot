@@ -1,5 +1,6 @@
 //core
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   ClickAwayListener,
   Typography,
@@ -7,10 +8,9 @@ import {
   Button,
   Box,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
 //components
-import { SettingsButton } from './SettingsButton';
 import { RangeController, DropdownController } from './Controllers';
+import { SettingsButton } from './SettingsButton';
 //other
 import { modelOptions } from '../constants';
 import { IModelConfigs } from '../types';

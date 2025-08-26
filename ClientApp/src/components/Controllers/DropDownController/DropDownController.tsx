@@ -71,13 +71,13 @@ export const DropdownController = <TFieldValues extends FieldValues>({
                 <em>{placeholder}</em>
               </MenuItem>
             )}
-            {options.map((opt) => (
+            {options.map((option) => (
               <MenuItem
-                key={opt.value}
-                value={opt.value}
-                disabled={opt.disabled}
+                key={option.id}
+                value={option.value}
+                disabled={option.disabled}
               >
-                {opt.label}
+                {option.value}
               </MenuItem>
             ))}
           </Select>

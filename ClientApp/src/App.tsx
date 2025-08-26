@@ -1,5 +1,7 @@
+//core
+import { useForm } from 'react-hook-form';
 //components
-import { Alert, TextField, ResponseContainer, Footer } from './components';
+import { ResponseContainer, TextField, Alert, Footer } from './components';
 import * as S from './styled';
 //other
 import {
@@ -28,6 +30,19 @@ function App() {
   const { isFetchModalConfigLoading, modalConfigData, updateModalConfig } =
     useModelConfig();
 
+  const defaultValues = {
+    fileName: fileOptions.find((file) => file.isDefault)?.name ?? '',
+  };
+
+  console.log('defaultValues', defaultValues);
+
+  const { control } = useForm<{
+    fileName: string;
+  }>({
+    defaultValues,
+    mode: 'all',
+  });
+
   return (
     <S.StyledContainer>
       <S.ContentWrapper>
@@ -52,7 +67,11 @@ function App() {
             modalConfigData={modalConfigData}
             updateModalConfig={updateModalConfig}
           />
-          <Footer />
+          <Footer
+            fileOptions={fileOptions}
+            control={control}
+            name={'fileName'}
+          />
         </S.StyledPaper>
       </S.ContentWrapper>
     </S.StyledContainer>
