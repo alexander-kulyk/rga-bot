@@ -7,6 +7,7 @@ import { model } from '../api';
 
 interface Question {
   question: string;
+  collectionName: string;
 }
 
 interface IModelAsk {
@@ -20,7 +21,7 @@ interface IModelAsk {
   error: string;
 }
 
-export const useModelAsk = (): IModelAsk => {
+export const useModelAsk = (selectedFileOption: string): IModelAsk => {
   const [question, setQuestion] = useState<string>('');
   const [answerText, setAnswerText] = useState<string>('');
   const [answerModelMetadata, setAnswerModelMetadata] =
@@ -41,7 +42,10 @@ export const useModelAsk = (): IModelAsk => {
     setAnswerText('');
 
     try {
-      const payload: Question = { question: question.trim() };
+      const payload: Question = {
+        question: question.trim(),
+        collectionName: selectedFileOption || '',
+      };
 
       const axiosResponse = await model.sendAsk(payload);
 

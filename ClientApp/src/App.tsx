@@ -1,10 +1,9 @@
-//core
-import { useForm } from 'react-hook-form';
 //components
 import { ResponseContainer, TextField, Alert, Footer } from './components';
 import * as S from './styled';
 //other
 import {
+  useFileOptionForm,
   useFileOptions,
   useModelConfig,
   useUploadFile,
@@ -13,6 +12,8 @@ import {
 import './App.css';
 
 function App() {
+  const { control, selectedFileOption } = useFileOptionForm();
+
   const {
     answerModelMetadata,
     handleKeyPress,
@@ -22,24 +23,13 @@ function App() {
     question,
     loading,
     error,
-  } = useModelAsk();
+  } = useModelAsk(selectedFileOption);
 
   const { fileOptions, isLoadingFetchFileOptions, fetchFileOptions } =
     useFileOptions();
   const { uploading, handleFileUpload } = useUploadFile({ fetchFileOptions });
   const { isFetchModalConfigLoading, modalConfigData, updateModalConfig } =
     useModelConfig();
-
-  const defaultValues = {
-    fileName: fileOptions.find((file) => file.isDefault)?.name ?? '',
-  };
-
-  const { control } = useForm<{
-    fileName: string;
-  }>({
-    defaultValues,
-    mode: 'all',
-  });
 
   return (
     <S.StyledContainer>

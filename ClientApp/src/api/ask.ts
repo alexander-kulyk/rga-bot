@@ -8,11 +8,12 @@ const baseUrl = API.baseUrl;
 
 interface IParams {
   question: string;
+  collectionName: string;
 }
 
 export const model = {
-  sendAsk: (question: IParams): AxiosPromise<IModelResponse> => {
+  sendAsk: (payload: IParams): AxiosPromise<IModelResponse> => {
     const url = `${baseUrl}${API.ask.method}`;
-    return axios.post(url, question, jsonPatchConfig);
+    return axios.post(url, payload, jsonPatchConfig);
   },
 };
