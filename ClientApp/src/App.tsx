@@ -34,8 +34,6 @@ function App() {
     fileName: fileOptions.find((file) => file.isDefault)?.name ?? '',
   };
 
-  console.log('defaultValues', defaultValues);
-
   const { control } = useForm<{
     fileName: string;
   }>({

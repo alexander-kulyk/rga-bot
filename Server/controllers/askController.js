@@ -5,14 +5,18 @@ import getChunkModel from '../models/manualChunkSchema.js';
 import getModelConfigsModel from '../models/modelConfigs.js';
 
 const askController = async (req, res) => {
-  const { question } = req.body;
-
-  const ManualChunk = getChunkModel('dfUserManualChunks');
-  const ModelConfigs = getModelConfigsModel();
+  const { question, collectionName } = req.body;
 
   if (!question || !question.trim()) {
     return res.status(400).json({ error: 'Question is required' });
   }
+
+  if (!collectionName || !collectionName.trim()) {
+    return res.status(400).json({ error: 'Collection name is required' });
+  }
+
+  const ManualChunk = getChunkModel(collectionName);
+  const ModelConfigs = getModelConfigsModel();
 
   try {
     const documentContent = await ManualChunk.find(
