@@ -13,7 +13,7 @@ import { RangeController, DropdownController } from './Controllers';
 import { SettingsButton } from './SettingsButton';
 //other
 import { modelOptions } from '../constants';
-import { IModelConfigs } from '../types';
+import { ComponentSize, IModelConfigs } from '../types';
 
 interface ModelConfigModalProps {
   modalConfigData?: IModelConfigs | null;
@@ -104,12 +104,12 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
 
       <Box sx={{ mb: 2 }}>
         <DropdownController
-          control={control}
-          name={'model'}
+          size={ComponentSize.SMALL}
           options={modelOptions}
-          label='Model'
-          size='small'
           disabled={disabled}
+          control={control}
+          label={'Model'}
+          name={'model'}
         />
       </Box>
 

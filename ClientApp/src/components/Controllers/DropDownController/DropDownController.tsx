@@ -2,7 +2,7 @@
 import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 import Select from 'react-select';
 //other
-import { IDropdownOption } from '../../../types';
+import { IDropdownOption, ComponentSize } from '../../../types';
 
 export interface DropdownControllerProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
@@ -13,14 +13,14 @@ export interface DropdownControllerProps<TFieldValues extends FieldValues> {
   label?: string;
   isClearable?: boolean;
   isSearchable?: boolean;
-  size?: 'small' | 'medium';
+  size?: ComponentSize;
 }
 
 export const DropdownController = <TFieldValues extends FieldValues>({
   isClearable = false,
   isSearchable = true,
   disabled = false,
-  size = 'small',
+  size = ComponentSize.SMALL,
   placeholder,
   options,
   control,
@@ -36,12 +36,12 @@ export const DropdownController = <TFieldValues extends FieldValues>({
   const customStyles = {
     control: (provided: any) => ({
       ...provided,
-      minHeight: size === 'small' ? '40px' : '56px',
-      fontSize: size === 'small' ? '14px' : '16px',
+      minHeight: size === ComponentSize.SMALL ? '40px' : '56px',
+      fontSize: size === ComponentSize.SMALL ? '14px' : '16px',
     }),
     valueContainer: (provided: any) => ({
       ...provided,
-      padding: size === 'small' ? '2px 8px' : '8px 14px',
+      padding: size === ComponentSize.SMALL ? '2px 8px' : '8px 14px',
     }),
   };
 
