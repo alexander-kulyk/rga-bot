@@ -16,18 +16,17 @@ import { modelOptions } from '../constants';
 import { ComponentSize, IModelConfigs } from '../types';
 
 interface ModelConfigModalProps {
+  updateModalConfig: (modalConfigData: IModelConfigs) => Promise<void>;
   modalConfigData?: IModelConfigs | null;
   onSettingsClick?: () => void;
   disabled?: boolean;
-  updateModalConfig: (modalConfigData: IModelConfigs) => Promise<void>;
 }
 
-// Local form shape used by react-hook-form
 interface IModelConfigForm {
-  model: string;
   temperature: number;
-  topP: number;
   maxTokens: number;
+  model: string;
+  topP: number;
 }
 
 export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
@@ -55,7 +54,6 @@ export const ModelConfigModal: React.FC<ModelConfigModalProps> = ({
     mode: 'onChange',
   });
 
-  // Keep form in sync when modalConfigData updates
   useEffect(() => {
     reset(defaultValues);
   }, [defaultValues, reset]);

@@ -1,7 +1,10 @@
+//core
 import React from 'react';
 import { Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import styled from 'styled-components';
+import AddIcon from '@mui/icons-material/Add';
+//other
+import { ComponentSize } from '../types';
 
 interface FloatingButtonProps {
   onClick: () => void;
@@ -21,12 +24,14 @@ const StyledFab = styled(Fab)<{ $variant: 'fixed' | 'relative' }>`
       : `
     position: static !important;
   `}
-  background-color: #d9e1f1 !important;
+  background-color: #ffffff !important;
   color: #666 !important;
   width: 32px !important;
   height: 32px !important;
   min-height: 32px !important;
   box-shadow: none !important;
+  border: 1px solid #ccc !important;
+  border-radius: 10px !important;
 
   &:disabled {
     background-color: #cccccc !important;
@@ -35,7 +40,7 @@ const StyledFab = styled(Fab)<{ $variant: 'fixed' | 'relative' }>`
   }
 `;
 
-export const FloatingButton: React.FC<FloatingButtonProps> = ({
+export const AddButton: React.FC<FloatingButtonProps> = ({
   onClick,
   disabled = false,
   variant = 'fixed',
@@ -43,7 +48,7 @@ export const FloatingButton: React.FC<FloatingButtonProps> = ({
   return (
     <StyledFab
       $variant={variant}
-      size='small'
+      size={ComponentSize.SMALL}
       onClick={onClick}
       disabled={disabled}
       aria-label='add file'

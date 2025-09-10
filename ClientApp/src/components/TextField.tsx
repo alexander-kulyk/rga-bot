@@ -10,44 +10,44 @@ import {
 import Fingerprint from '@mui/icons-material/Fingerprint';
 //components
 import { ModelConfigModal } from './ModelConfigModal';
-import { FloatingButton } from './FloatingButton';
+import { AddButton } from './AddButton';
 //other
 import { IModelConfigs } from '../types';
 
 interface TextFieldProps {
-  value: string;
-  onChange: (value: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  updateModalConfig: (modalConfigData: IModelConfigs) => Promise<void>;
   onKeyPress: (e: React.KeyboardEvent) => void;
-  loading: boolean;
-  disabled?: boolean;
-  placeholder?: string;
-  label?: string;
+  modalConfigData?: IModelConfigs | null;
+  onSubmit: (e: React.FormEvent) => void;
   onFloatingButtonClick?: () => void;
+  onChange: (value: string) => void;
   floatingButtonDisabled?: boolean;
-  uploading?: boolean;
   onSettingsClick?: () => void;
   settingsDisabled?: boolean;
-  modalConfigData?: IModelConfigs | null;
-  updateModalConfig: (modalConfigData: IModelConfigs) => Promise<void>;
+  placeholder?: string;
+  uploading?: boolean;
+  disabled?: boolean;
+  loading: boolean;
+  label?: string;
+  value: string;
 }
 
 export const TextField: React.FC<TextFieldProps> = ({
-  value,
-  onChange,
-  onSubmit,
-  onKeyPress,
-  loading,
-  disabled = false,
-  placeholder = 'Type your question here...',
   label = 'Ask a question about the documentation',
-  onFloatingButtonClick,
+  placeholder = 'Type your question here...',
   floatingButtonDisabled = false,
-  uploading = false,
-  onSettingsClick,
   settingsDisabled = false,
-  modalConfigData,
+  onFloatingButtonClick,
   updateModalConfig,
+  uploading = false,
+  disabled = false,
+  onSettingsClick,
+  modalConfigData,
+  onKeyPress,
+  onSubmit,
+  onChange,
+  loading,
+  value,
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +55,6 @@ export const TextField: React.FC<TextFieldProps> = ({
   };
 
   const handleButtonClick = (e: React.MouseEvent) => {
-    // Create a synthetic form event for the button click
     const syntheticEvent = {
       preventDefault: () => {},
       currentTarget: e.currentTarget,
@@ -197,7 +196,7 @@ export const TextField: React.FC<TextFieldProps> = ({
             alignItems: 'center',
           }}
         >
-          <FloatingButton
+          <AddButton
             onClick={onFloatingButtonClick}
             disabled={floatingButtonDisabled}
             variant='relative'

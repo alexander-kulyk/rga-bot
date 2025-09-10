@@ -26,7 +26,8 @@ const StyledIconButton = styled(IconButton)<{
   `}
   background-color: rgba(255, 255, 255, 0.9) !important;
   color: #666 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  /* border: 1px solid #ccc !important;
+  border-radius: 8px !important; */
 
   &:hover {
     background-color: rgba(255, 255, 255, 1) !important;
