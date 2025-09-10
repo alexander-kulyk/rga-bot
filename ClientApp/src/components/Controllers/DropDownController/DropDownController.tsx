@@ -1,88 +1,87 @@
 //core
 import { Controller, Control, FieldValues, Path } from 'react-hook-form';
-import {
-  SelectChangeEvent,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import Select from 'react-select';
 //other
 import { IDropdownOption } from '../../../types';
 
 export interface DropdownControllerProps<TFieldValues extends FieldValues> {
-  variant?: 'outlined' | 'filled' | 'standard';
   control: Control<TFieldValues>;
   name: Path<TFieldValues>;
   options: IDropdownOption[];
-  size?: 'small' | 'medium';
-  displayEmpty?: boolean;
   placeholder?: string;
-  fullWidth?: boolean;
   disabled?: boolean;
   label?: string;
-  id?: string;
-  sx?: any;
+  isClearable?: boolean;
+  isSearchable?: boolean;
+  size?: 'small' | 'medium';
 }
 
 export const DropdownController = <TFieldValues extends FieldValues>({
-  variant = 'outlined',
-  displayEmpty = true,
+  isClearable = false,
+  isSearchable = true,
   disabled = false,
-  fullWidth = true,
   size = 'small',
   placeholder,
   options,
   control,
   name,
   label,
-  id,
-  sx,
 }: DropdownControllerProps<TFieldValues>) => {
-  const labelId = id ? `${id}-label` : undefined;
+  const selectOptions = options.map((option) => ({
+    value: option.value,
+    label: option.value,
+    isDisabled: option.disabled,
+  }));
+
+  const customStyles = {
+    control: (provided: any) => ({
+      ...provided,
+      minHeight: size === 'small' ? '40px' : '56px',
+      fontSize: size === 'small' ? '14px' : '16px',
+    }),
+    valueContainer: (provided: any) => ({
+      ...provided,
+      padding: size === 'small' ? '2px 8px' : '8px 14px',
+    }),
+  };
 
   return (
-    <Controller
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormControl
-          fullWidth={fullWidth}
-          size={size}
-          disabled={disabled}
-          variant={variant}
-          sx={sx}
+    <div>
+      {label && (
+        <label
+          style={{
+            display: 'block',
+            marginBottom: '4px',
+            fontSize: '14px',
+            fontWeight: 500,
+            color: 'rgba(0, 0, 0, 0.6)',
+          }}
         >
-          {label && <InputLabel id={labelId}>{label}</InputLabel>}
-          <Select
-            labelId={labelId}
-            id={id}
-            value={(field.value as string) ?? ''}
-            onChange={(e) =>
-              field.onChange((e as SelectChangeEvent<string>).target.value)
-            }
-            label={label}
-            displayEmpty={displayEmpty}
-            inputProps={{ 'aria-label': label || id || (name as string) }}
-            MenuProps={{ disablePortal: true }}
-          >
-            {displayEmpty && placeholder && (
-              <MenuItem value=''>
-                <em>{placeholder}</em>
-              </MenuItem>
-            )}
-            {options.map((option) => (
-              <MenuItem
-                key={option.id}
-                value={option.value}
-                disabled={option.disabled}
-              >
-                {option.value}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          {label}
+        </label>
       )}
-    />
+      <Controller
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <Select
+            {...field}
+            options={selectOptions}
+            placeholder={placeholder}
+            isDisabled={disabled}
+            isClearable={isClearable}
+            isSearchable={isSearchable}
+            styles={customStyles}
+            onChange={(selectedOption) => {
+              field.onChange(selectedOption ? selectedOption.value : '');
+            }}
+            value={
+              selectOptions.find((option) => option.value === field.value) ||
+              null
+            }
+          />
+        )}
+      />
+    </div>
   );
 };
