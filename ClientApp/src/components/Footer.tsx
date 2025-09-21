@@ -1,6 +1,6 @@
 //core
 import React, { useMemo } from 'react';
-import { Typography } from '@mui/material';
+import { Typography, Tooltip } from '@mui/material';
 import { Control, FieldValues, Path } from 'react-hook-form';
 //other
 import { IDropdownOption, IFileOptions } from '../types';
@@ -8,25 +8,32 @@ import { DropdownController } from './Controllers';
 
 interface IProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
+  isTextFieldFocused?: boolean;
   fileOptions: IFileOptions[];
   name: Path<TFieldValues>;
+  selectedValue?: string;
   text?: string;
 }
 
 export const Footer = <TFieldValues extends FieldValues>({
-  text = 'Press Enter or click the send button to ask your question',
+  text = 'Powered by AI',
+  isTextFieldFocused = false,
+  selectedValue = '',
   fileOptions,
   control,
   name,
 }: IProps<TFieldValues>) => {
-  const getOptions = (): IDropdownOption[] =>
-    fileOptions.map((option) => ({
-      id: option._id,
-      value: option.name,
-      disabled: false,
-    }));
+  const options: IDropdownOption[] = useMemo(
+    () =>
+      fileOptions.map((option) => ({
+        id: option._id,
+        value: option.name,
+        disabled: false,
+      })),
+    [fileOptions]
+  );
 
-  const options: IDropdownOption[] = useMemo(() => getOptions(), [fileOptions]);
+  const hasError = isTextFieldFocused && !selectedValue;
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -43,7 +50,21 @@ export const Footer = <TFieldValues extends FieldValues>({
         {text}
       </Typography>
       <div style={{ width: '200px', marginTop: '16px' }}>
-        <DropdownController options={options} control={control} name={name} />
+        <Tooltip
+          title="Don't forget to select a document"
+          open={hasError}
+          placement='top'
+          arrow
+        >
+          <div>
+            <DropdownController
+              options={options}
+              control={control}
+              name={name}
+              hasError={hasError}
+            />
+          </div>
+        </Tooltip>
       </div>
     </div>
   );

@@ -12,7 +12,9 @@ const askController = async (req, res) => {
   }
 
   if (!collectionName || !collectionName.trim()) {
-    return res.status(400).json({ error: 'Collection name is required' });
+    return res
+      .status(400)
+      .json({ error: 'Oops! You need to select a document first' });
   }
 
   const ManualChunk = getChunkModel(collectionName);

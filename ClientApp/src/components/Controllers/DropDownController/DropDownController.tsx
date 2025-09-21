@@ -8,19 +8,21 @@ export interface DropdownControllerProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>;
   name: Path<TFieldValues>;
   options: IDropdownOption[];
+  isSearchable?: boolean;
+  isClearable?: boolean;
+  size?: ComponentSize;
   placeholder?: string;
   disabled?: boolean;
+  hasError?: boolean;
   label?: string;
-  isClearable?: boolean;
-  isSearchable?: boolean;
-  size?: ComponentSize;
 }
 
 export const DropdownController = <TFieldValues extends FieldValues>({
+  size = ComponentSize.SMALL,
   isClearable = false,
   isSearchable = true,
   disabled = false,
-  size = ComponentSize.SMALL,
+  hasError = false,
   placeholder,
   options,
   control,
@@ -34,10 +36,16 @@ export const DropdownController = <TFieldValues extends FieldValues>({
   }));
 
   const customStyles = {
-    control: (provided: any) => ({
+    control: (provided: any, state: any) => ({
       ...provided,
       minHeight: size === ComponentSize.SMALL ? '40px' : '56px',
       fontSize: size === ComponentSize.SMALL ? '14px' : '16px',
+      borderColor: hasError ? '#f44336' : provided.borderColor,
+      boxShadow:
+        hasError && state.isFocused ? '0 0 0 1px #f44336' : provided.boxShadow,
+      '&:hover': {
+        borderColor: hasError ? '#f44336' : provided.borderColor,
+      },
     }),
     valueContainer: (provided: any) => ({
       ...provided,

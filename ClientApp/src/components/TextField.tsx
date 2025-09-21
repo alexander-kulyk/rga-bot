@@ -1,5 +1,5 @@
 //core
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TextField as MuiTextField,
   CircularProgress,
@@ -17,6 +17,7 @@ import { IModelConfigs } from '../types';
 interface TextFieldProps {
   updateModalConfig: (modalConfigData: IModelConfigs) => Promise<void>;
   onKeyPress: (e: React.KeyboardEvent) => void;
+  onFocusChange?: (isFocused: boolean) => void;
   modalConfigData?: IModelConfigs | null;
   onSubmit: (e: React.FormEvent) => void;
   onFloatingButtonClick?: () => void;
@@ -43,6 +44,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   disabled = false,
   onSettingsClick,
   modalConfigData,
+  onFocusChange,
   onKeyPress,
   onSubmit,
   onChange,
@@ -52,6 +54,14 @@ export const TextField: React.FC<TextFieldProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(e);
+  };
+
+  const handleFocus = () => {
+    onFocusChange?.(true);
+  };
+
+  const handleBlur = () => {
+    onFocusChange?.(false);
   };
 
   const handleButtonClick = (e: React.MouseEvent) => {
@@ -82,6 +92,8 @@ export const TextField: React.FC<TextFieldProps> = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyPress={onKeyPress}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           disabled={loading || disabled}
           sx={{
             '& .MuiOutlinedInput-root': {

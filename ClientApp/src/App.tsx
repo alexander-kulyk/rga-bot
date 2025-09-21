@@ -1,5 +1,6 @@
 //components
 import { ResponseContainer, TextField, Alert, Footer } from './components';
+import { useState } from 'react';
 import * as S from './styled';
 //other
 import {
@@ -12,8 +13,9 @@ import {
 import './App.css';
 
 function App() {
-  const { control, selectedFileOption } = useFileOptionForm();
+  const [isTextFieldFocused, setIsTextFieldFocused] = useState<boolean>(false);
 
+  const { control, selectedFileOption } = useFileOptionForm();
   const {
     answerModelMetadata,
     handleKeyPress,
@@ -45,6 +47,7 @@ function App() {
             onChange={setQuestion}
             onSubmit={handleSubmit}
             onKeyPress={handleKeyPress}
+            onFocusChange={setIsTextFieldFocused}
             loading={
               loading || isFetchModalConfigLoading || isLoadingFetchFileOptions
             }
@@ -59,6 +62,8 @@ function App() {
             fileOptions={fileOptions}
             control={control}
             name={'fileName'}
+            isTextFieldFocused={isTextFieldFocused}
+            selectedValue={selectedFileOption}
           />
         </S.StyledPaper>
       </S.ContentWrapper>
