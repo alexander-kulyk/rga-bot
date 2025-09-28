@@ -3,13 +3,13 @@ import {
   RecursiveCharacterTextSplitter,
   TokenTextSplitter,
 } from 'langchain/text_splitter';
-import mammoth from 'mammoth';
 //other
 import getChunkModel from '../models/manualChunkSchema.js';
 import getFileOptionsModel from '../models/fileOptionsSchema.js';
 import createVectors from './createVectors.js';
+import { getExtractedText } from './getExtractedText.js';
 
-// Load and extract plain text from the DOCX file
+// Load and extract plain text from DOCX, PDF, or Excel files
 const loadDocx = async (buffer, fileName) => {
   const collName = fileName
     .replace(/\.[^/.]+$/, '')
@@ -33,10 +33,9 @@ const loadDocx = async (buffer, fileName) => {
   });
 
   try {
-    const result = await mammoth.extractRawText({ buffer });
+    const extractedText = await getExtractedText(buffer, fileName);
 
-    //const splittedDocument = await splitter.createDocuments([result.value]);
-    const splittedDocument = await splitter.createDocuments([result.value]);
+    const splittedDocument = await splitter.createDocuments([extractedText]);
 
     const documentsWithVectors = await createVectors(splittedDocument);
 
@@ -54,7 +53,7 @@ const loadDocx = async (buffer, fileName) => {
       }))
     );
   } catch (err) {
-    console.error(`Error reading or parsing ${filePath}:`, err);
+    console.error(`Error reading or parsing ${fileName}:`, err);
     throw new Error('Failed to load document');
   }
 };
