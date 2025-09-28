@@ -18,7 +18,7 @@ interface IModelAsk {
   question: string;
   answerText: string;
   loading: boolean;
-  error: string;
+  askError: string;
 }
 
 export const useModelAsk = (selectedFileOption: string): IModelAsk => {
@@ -27,18 +27,18 @@ export const useModelAsk = (selectedFileOption: string): IModelAsk => {
   const [answerModelMetadata, setAnswerModelMetadata] =
     useState<IAnswerModelMetadata | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [askError, setAskError] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!question.trim()) {
-      setError('Please enter a question');
+      setAskError('Please enter a question');
       return;
     }
 
     setLoading(true);
-    setError('');
+    setAskError('');
     setAnswerText('');
 
     try {
@@ -60,17 +60,17 @@ export const useModelAsk = (selectedFileOption: string): IModelAsk => {
           usage: result.usage,
         });
       } else if (result.error) {
-        setError(result.error);
+        setAskError(result.error);
       } else {
-        setError('No response received');
+        setAskError('No response received');
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        setError(
+        setAskError(
           err.response?.data?.error || err.message || 'Failed to get response'
         );
       } else {
-        setError('An unexpected error occurred');
+        setAskError('An unexpected error occurred');
       }
       console.error('Error asking question:', err);
     } finally {
@@ -93,6 +93,6 @@ export const useModelAsk = (selectedFileOption: string): IModelAsk => {
     answerText,
     question,
     loading,
-    error,
+    askError,
   };
 };

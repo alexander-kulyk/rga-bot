@@ -8,14 +8,14 @@ interface IUseFileOptions {
   fetchFileOptions: () => Promise<void>;
   isLoadingFetchFileOptions: boolean;
   fileOptions: IFileOptions[];
-  fileOptionsError: string | null;
+  fileOptionsError: string;
 }
 
 export const useFileOptions = (): IUseFileOptions => {
   const [fileOptions, setFileOptions] = useState<IFileOptions[]>([]);
   const [isLoadingFetchFileOptions, setIsLoadingFetchFileOptions] =
     useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
 
   const fetchFileOptions = async () => {
     try {

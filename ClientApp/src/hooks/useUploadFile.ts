@@ -43,7 +43,7 @@ export const useUploadFile = ({ fetchFileOptions }: IProps): IUploadFile => {
 
       if (axios.isAxiosError(error)) {
         const errorMessage =
-          error.response?.data?.message || error.message || 'Upload failed';
+          error.response?.data?.error || error.message || 'Upload failed';
         setUploadError(errorMessage);
       } else {
         setUploadError('An unexpected error occurred during upload');

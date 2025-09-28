@@ -23,13 +23,21 @@ function App() {
     setQuestion,
     answerText,
     question,
+    askError,
     loading,
-    error,
   } = useModelAsk(selectedFileOption);
 
-  const { fileOptions, isLoadingFetchFileOptions, fetchFileOptions } =
-    useFileOptions();
-  const { uploading, handleFileUpload } = useUploadFile({ fetchFileOptions });
+  const {
+    isLoadingFetchFileOptions,
+    fetchFileOptions,
+    fileOptionsError,
+    fileOptions,
+  } = useFileOptions();
+
+  const { uploading, handleFileUpload, uploadError } = useUploadFile({
+    fetchFileOptions,
+  });
+
   const { isFetchModalConfigLoading, modalConfigData, updateModalConfig } =
     useModelConfig();
 
@@ -41,7 +49,7 @@ function App() {
             answerText={answerText}
             answerModelMetadata={answerModelMetadata}
           />
-          <Alert error={error} />
+          <Alert error={askError || uploadError || fileOptionsError} />
           <TextField
             value={question}
             onChange={setQuestion}
