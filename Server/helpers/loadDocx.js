@@ -4,10 +4,10 @@ import {
   TokenTextSplitter,
 } from 'langchain/text_splitter';
 //other
-import getChunkModel from '../models/manualChunkSchema.js';
 import getFileOptionsModel from '../models/fileOptionsSchema.js';
-import createVectors from './createVectors.js';
+import getChunkModel from '../models/manualChunkSchema.js';
 import { getExtractedText } from './getExtractedText.js';
+import createVectors from './createVectors.js';
 
 // Load and extract plain text from DOCX, PDF, or Excel files
 const loadDocx = async (buffer, fileName) => {

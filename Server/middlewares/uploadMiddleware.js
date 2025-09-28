@@ -13,11 +13,13 @@ const uploadMiddleware = multer({
       size: file.size,
     });
 
-    // Accept .docx files
+    // Accept .docx and .doc files
     const isDocx =
       file.mimetype ===
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-      file.originalname.toLowerCase().endsWith('.docx');
+      file.mimetype === 'application/msword' ||
+      file.originalname.toLowerCase().endsWith('.docx') ||
+      file.originalname.toLowerCase().endsWith('.doc');
 
     // Accept .pdf files
     const isPdf =
@@ -38,7 +40,7 @@ const uploadMiddleware = multer({
     } else {
       console.log('❌ File rejected - unsupported file type');
       const error = new Error(
-        'Only .docx, .pdf, and Excel (.xlsx/.xls) files are allowed. Received: ' +
+        'Only .pdf, .docx, .doc, and Excel (.xlsx/.xls) files are allowed. Received: ' +
           file.mimetype
       );
       cb(error, false);

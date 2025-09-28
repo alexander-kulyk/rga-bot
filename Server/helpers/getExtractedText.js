@@ -20,7 +20,7 @@ export const getExtractedText = async (buffer, fileName) => {
   let extractedText = '';
 
   // Extract text based on file type
-  if (fileType === 'docx') {
+  if (fileType === 'docx' || fileType === 'doc') {
     const result = await mammoth.extractRawText({ buffer });
     extractedText = result.value;
   } else if (fileType === 'pdf') {
@@ -61,7 +61,7 @@ export const getExtractedText = async (buffer, fileName) => {
     extractedText = allText.join('\n');
   } else {
     throw new Error(
-      `Unsupported file type: ${fileType}. Only DOCX, PDF, and Excel (XLSX/XLS) files are supported.`
+      `Unsupported file type: ${fileType}. Only PDF, DOCX, DOC, and Excel (XLSX/XLS) files are supported.`
     );
   }
 

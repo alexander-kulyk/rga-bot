@@ -58,7 +58,7 @@ export const useUploadFile = ({ fetchFileOptions }: IProps): IUploadFile => {
   const handleFileUpload = () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.docx';
+    input.accept = '.pdf,.docx,.doc,.xlsx,.xls';
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
