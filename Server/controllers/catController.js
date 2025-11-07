@@ -93,12 +93,11 @@ export const createCat = async (req, res) => {
 export const updateCat = async (req, res) => {
   try {
     const { name, age, breed, color } = req.body;
-    const updateData = {};
-
-    if (name !== undefined) updateData.name = name;
-    if (age !== undefined) updateData.age = age;
-    if (breed !== undefined) updateData.breed = breed;
-    if (color !== undefined) updateData.color = color;
+    
+    // Filter out undefined values to only update provided fields
+    const updateData = Object.fromEntries(
+      Object.entries({ name, age, breed, color }).filter(([_, v]) => v !== undefined)
+    );
 
     const cat = await Cat.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
@@ -153,12 +152,4 @@ export const deleteCat = async (req, res) => {
       error: error.message,
     });
   }
-};
-
-export default {
-  getCats,
-  getCatById,
-  createCat,
-  updateCat,
-  deleteCat,
 };
