@@ -1,0 +1,29 @@
+{
+  "servers": {
+    "mongodb": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mongodb-mcp-server@1.2.0", "--readOnly"],
+      "env": {
+        "MDB_MCP_CONNECTION_STRING": "${env:DB_HOST}",
+        "MDB_MCP_LOGGERS": "mcp,stderr"
+      }
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
+      "env": {
+        "GITHUB_TOKEN": "${env:GITHUB_TOKEN}"
+      }
+    },
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com",
+      "env": {
+        "VERCEL_TOKEN": "${env:VERCEL_TOKEN}" // optional if you use OAuth
+      }
+    }
+  },
+  "inputs": []
+}
